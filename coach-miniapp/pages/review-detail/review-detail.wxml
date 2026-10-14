@@ -1,0 +1,69 @@
+<view class="container">
+  <view class="checkpoint-tabs">
+    <scroll-view scroll-x="true" class="tabs-scroll">
+      <view
+        class="tab-item {{currentIndex === index ? 'active' : ''}} {{item.status}}"
+        wx:for="{{checkpoints}}"
+        wx:key="id"
+        data-index="{{index}}"
+        bindtap="selectCheckpoint"
+      >
+        <text class="tab-num">{{index + 1}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="review-content" wx:if="{{checkpoints[currentIndex]}}">
+    <view class="cp-info card">
+      <text class="cp-name">{{checkpoints[currentIndex].name}}</text>
+      <text class="tag {{checkpoints[currentIndex].status === 'passed' ? 'tag-green' : checkpoints[currentIndex].status === 'rejected' ? 'tag-red' : checkpoints[currentIndex].status === 'reviewing' ? 'tag-orange' : 'tag-gray'}}">
+        {{checkpoints[currentIndex].status === 'passed' ? '已通过' : checkpoints[currentIndex].status === 'rejected' ? '已驳回' : checkpoints[currentIndex].status === 'reviewing' ? '待审核' : '未提交'}}
+      </text>
+    </view>
+
+    <view class="compare-area">
+      <view class="img-card card">
+        <view class="img-label">官方参照图</view>
+        <image class="review-img" src="{{checkpoints[currentIndex].referenceImage}}" mode="aspectFill" wx:if="{{checkpoints[currentIndex].referenceImage}}"></image>
+      </view>
+      <view class="img-card card">
+        <view class="img-label">用户打卡图</view>
+        <image class="review-img" src="{{checkpoints[currentIndex].userPhoto}}" mode="aspectFill" wx:if="{{checkpoints[currentIndex].userPhoto}}"></image>
+        <view class="no-photo" wx:else>暂无打卡照片</view>
+      </view>
+    </view>
+
+    <view class="location-info card" wx:if="{{checkpoints[currentIndex].userLocation}}">
+      <text>📍 打卡定位：{{checkpoints[currentIndex].userLocation.latitude}}, {{checkpoints[currentIndex].userLocation.longitude}}</text>
+      <text class="text-muted">提交时间：{{checkpoints[currentIndex].submitTime}}</text>
+    </view>
+
+    <view class="reject-info card" wx:if="{{checkpoints[currentIndex].rejectReason}}">
+      <text class="reject-label">上次驳回原因：</text>
+      <text class="reject-text">{{checkpoints[currentIndex].rejectReason}}</text>
+    </view>
+
+    <view class="review-actions" wx:if="{{checkpoints[currentIndex].status === 'reviewing'}}">
+      <button class="btn-success" bindtap="approve">审核通过</button>
+      <button class="btn-danger" bindtap="reject">驳回</button>
+    </view>
+  </view>
+
+  <view class="reject-modal" wx:if="{{showReject}}">
+    <view class="modal-mask" bindtap="cancelReject"></view>
+    <view class="modal-content">
+      <view class="modal-title">驳回原因</view>
+      <textarea
+        class="modal-textarea"
+        placeholder="请填写驳回原因，如：场景不符、角度错误、缺少人员等"
+        value="{{rejectReason}}"
+        bindinput="onRejectInput"
+        maxlength="200"
+      ></textarea>
+      <view class="modal-btns">
+        <button class="btn-outline" bindtap="cancelReject">取消</button>
+        <button class="btn-danger" bindtap="confirmReject">确认驳回</button>
+      </view>
+    </view>
+  </view>
+</view>

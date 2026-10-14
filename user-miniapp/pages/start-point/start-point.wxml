@@ -1,0 +1,37 @@
+<view class="container" wx:if="{{task}}">
+  <view class="point-card card">
+    <view class="point-icon">📍</view>
+    <view class="point-name">{{task.startPoint.name}}</view>
+    <view class="point-desc">请前往此地点，上传实时位置以解锁打卡任务</view>
+    <view class="range-tip">允许误差范围：{{task.startPoint.range}} 米</view>
+  </view>
+
+  <view class="map-placeholder card">
+    <text>地图占位（接入微信地图组件）</text>
+  </view>
+
+  <view class="distance-info card" wx:if="{{currentLocation}}">
+    <view class="distance-value" wx:if="{{!inRange}}">
+      距起点约 <text class="distance-num">{{distance}}</text> 米
+    </view>
+    <view class="distance-value success" wx:if="{{inRange}}">
+      ✅ 已在起点范围内
+    </view>
+  </view>
+
+  <view class="action-area" wx:if="{{!unlocked}}">
+    <button
+      class="btn-primary"
+      bindtap="checkLocation"
+      loading="{{checking}}"
+      disabled="{{checking}}"
+    >
+      {{checking ? '定位中...' : '上传我的实时位置'}}
+    </button>
+    <view class="tip">需到达启动点位后上传定位，匹配成功即可解锁全部打卡任务</view>
+  </view>
+
+  <view class="action-area" wx:if="{{unlocked}}">
+    <button class="btn-primary" bindtap="goCheckin">开始打卡</button>
+  </view>
+</view>

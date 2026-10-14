@@ -1,0 +1,70 @@
+<view class="container">
+  <view class="checkpoint-tabs">
+    <scroll-view scroll-x="true" class="tabs-scroll">
+      <view
+        class="tab-item {{currentIndex === index ? 'active' : ''}}"
+        wx:for="{{checkpoints}}"
+        wx:key="id"
+        data-index="{{index}}"
+        bindtap="selectCheckpoint"
+      >
+        <text class="tab-num">{{index + 1}}</text>
+        <text class="tab-status" wx:if="{{item.status === 'passed'}}">✓</text>
+        <text class="tab-status reviewing" wx:elif="{{item.status === 'reviewing'}}">审</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="checkpoint-detail card" wx:if="{{checkpoints[currentIndex]}}">
+    <view class="cp-header">
+      <text class="cp-name">{{checkpoints[currentIndex].name}}</text>
+      <text class="tag {{checkpoints[currentIndex].status === 'passed' ? 'tag-green' : checkpoints[currentIndex].status === 'reviewing' ? 'tag-orange' : 'tag-gray'}}">
+        {{checkpoints[currentIndex].status === 'passed' ? '已通过' : checkpoints[currentIndex].status === 'reviewing' ? '审核中' : '待打卡'}}
+      </text>
+    </view>
+
+    <view class="cp-location">📍 {{checkpoints[currentIndex].location}}</view>
+
+    <view class="reference-section" wx:if="{{checkpoints[currentIndex].referenceImage}}">
+      <view class="section-label">官方参照图</view>
+      <image class="reference-img" src="{{checkpoints[currentIndex].referenceImage}}" mode="aspectFill"></image>
+      <view class="reference-tip">请参照上图角度、场景、构图拍照</view>
+    </view>
+
+    <view class="photo-section">
+      <view class="section-label">我的打卡照片</view>
+      <view class="photo-upload" bindtap="takePhoto" wx:if="{{!photoPath}}">
+        <text class="upload-icon">📷</text>
+        <text class="upload-text">点击拍照</text>
+      </view>
+      <image class="uploaded-photo" src="{{photoPath}}" mode="aspectFill" wx:if="{{photoPath}}"></image>
+    </view>
+
+    <view class="remark-section">
+      <view class="section-label">备注（选填）</view>
+      <textarea
+        class="remark-input"
+        placeholder="添加打卡备注..."
+        value="{{remark}}"
+        bindinput="onRemarkInput"
+        maxlength="200"
+      ></textarea>
+    </view>
+
+    <view class="reject-reason" wx:if="{{checkpoints[currentIndex].rejectReason}}">
+      <text class="reject-label">驳回原因：</text>
+      <text class="reject-text">{{checkpoints[currentIndex].rejectReason}}</text>
+    </view>
+  </view>
+
+  <view class="submit-bar">
+    <button
+      class="btn-primary"
+      bindtap="submitCheckin"
+      loading="{{submitting}}"
+      disabled="{{submitting || !photoPath}}"
+    >
+      提交打卡
+    </button>
+  </view>
+</view>

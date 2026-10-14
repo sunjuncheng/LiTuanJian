@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="profile-header card">
+    <view wx:if="{{isLoggedIn}}">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}"></image>
+      <text class="nickname">{{userInfo.nickname}}</text>
+    </view>
+    <view wx:elif="{{showLoginForm}}" class="login-form">
+      <view class="form-tabs">
+        <text class="tab {{mode === 'login' ? 'tab-active' : ''}}" bindtap="switchMode" data-mode="login">登录</text>
+        <text class="tab {{mode === 'register' ? 'tab-active' : ''}}" bindtap="switchMode" data-mode="register">注册</text>
+      </view>
+      <view wx:if="{{mode === 'register'}}" class="form-item">
+        <input class="form-input" placeholder="昵称（选填）" value="{{nickname}}" bindinput="onNicknameInput" />
+      </view>
+      <view class="form-item">
+        <input class="form-input" type="number" placeholder="手机号" value="{{phone}}" bindinput="onPhoneInput" />
+      </view>
+      <view class="form-item">
+        <input class="form-input" password placeholder="密码" value="{{password}}" bindinput="onPasswordInput" />
+      </view>
+      <button wx:if="{{mode === 'login'}}" class="btn-primary" bindtap="doLogin" loading="{{loading}}">登录</button>
+      <button wx:else class="btn-primary" bindtap="doRegister" loading="{{loading}}">注册</button>
+      <view class="form-switch">
+        <text wx:if="{{mode === 'login'}}" bindtap="switchMode">没有账号？去注册</text>
+        <text wx:else bindtap="switchMode">已有账号？去登录</text>
+      </view>
+    </view>
+    <view wx:else class="login-prompt" bindtap="toggleLoginForm">
+      <text class="login-text">点击登录</text>
+    </view>
+  </view>
+
+  <view class="menu-list card">
+    <view class="menu-item" bindtap="goMyTasks">
+      <text class="menu-icon">📋</text>
+      <text class="menu-text">我的任务</text>
+      <text class="menu-arrow">></text>
+    </view>
+    <view class="menu-item">
+      <text class="menu-icon">🏆</text>
+      <text class="menu-text">完成记录</text>
+      <text class="menu-arrow">></text>
+    </view>
+    <view class="menu-item">
+      <text class="menu-icon">⚙️</text>
+      <text class="menu-text">设置</text>
+      <text class="menu-arrow">></text>
+    </view>
+  </view>
+
+  <view wx:if="{{isLoggedIn}}" class="logout-area">
+    <button class="btn-outline" bindtap="logout">退出登录</button>
+  </view>
+</view>

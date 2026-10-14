@@ -1,0 +1,62 @@
+<view class="container" wx:if="{{task}}">
+  <view class="task-info card">
+    <view class="task-name">{{task.name}}</view>
+    <view class="task-meta">
+      <text>📍 {{task.checkpointCount}} 个打卡点</text>
+      <text>👥 {{participants.length + teams.length}} 个参与</text>
+    </view>
+    <view class="overall-progress">
+      <text>整体完成度</text>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{task.completionRate}}%"></view>
+      </view>
+      <text class="progress-num">{{task.completionRate}}%</text>
+    </view>
+  </view>
+
+  <view class="tabs">
+    <view class="tab {{activeTab === 'solo' ? 'active' : ''}}" data-tab="solo" bindtap="switchTab">单人 ({{participants.length}})</view>
+    <view class="tab {{activeTab === 'team' ? 'active' : ''}}" data-tab="team" bindtap="switchTab">队伍 ({{teams.length}})</view>
+  </view>
+
+  <view wx:if="{{activeTab === 'solo'}}" class="participant-list">
+    <view class="participant-card card" wx:for="{{participants}}" wx:key="id">
+      <view class="p-header">
+        <image class="avatar" src="{{item.avatarUrl}}"></image>
+        <view class="p-info">
+          <text class="p-name">{{item.nickname}}</text>
+          <text class="tag {{item.status === 'completed' ? 'tag-green' : item.status === 'in_progress' ? 'tag-blue' : 'tag-gray'}}">
+            {{item.statusText}}
+          </text>
+        </view>
+        <view class="p-progress">
+          <text class="p-progress-num">{{item.completionRate}}%</text>
+        </view>
+      </view>
+      <view class="p-actions">
+        <button class="mini-btn" data-id="{{item.id}}" bindtap="goReview">审核</button>
+        <button class="mini-btn outline" data-id="{{item.id}}" bindtap="remind">提醒</button>
+        <button class="mini-btn outline" data-id="{{item.id}}" bindtap="manualUnlock" wx:if="{{!item.unlocked}}">解锁</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{activeTab === 'team'}}" class="participant-list">
+    <view class="participant-card card" wx:for="{{teams}}" wx:key="id">
+      <view class="p-header">
+        <view class="team-avatar">👥</view>
+        <view class="p-info">
+          <text class="p-name">{{item.name}}</text>
+          <text class="text-muted">队长：{{item.leaderName}} · {{item.memberCount}}人</text>
+        </view>
+        <view class="p-progress">
+          <text class="p-progress-num">{{item.completionRate}}%</text>
+        </view>
+      </view>
+      <view class="p-actions">
+        <button class="mini-btn" data-id="{{item.id}}" bindtap="goReview">审核</button>
+        <button class="mini-btn outline" data-id="{{item.id}}" bindtap="remind">提醒</button>
+      </view>
+    </view>
+  </view>
+</view>

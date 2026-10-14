@@ -1,0 +1,106 @@
+<view class="container">
+  <view class="header">
+    <text class="title">团建打卡任务</text>
+  </view>
+
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'all' ? 'tab-active' : ''}}" data-tab="all" bindtap="switchTab">
+      全部任务
+    </view>
+    <view class="tab-item {{currentTab === 'my' ? 'tab-active' : ''}}" data-tab="my" bindtap="switchTab">
+      我的任务
+    </view>
+  </view>
+
+  <!-- 全部任务 -->
+  <view wx:if="{{currentTab === 'all'}}">
+    <view wx:if="{{allTasks.length === 0 && !loading}}" class="empty">
+      <text>暂无进行中的任务</text>
+    </view>
+
+    <view class="task-list">
+      <view
+        class="task-card card"
+        wx:for="{{allTasks}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <view class="task-header">
+          <text class="task-name">{{item.name}}</text>
+          <text class="status-tag {{item.statusText === '进行中' ? 'tag-green' : 'tag-gray'}}">
+            {{item.statusText}}
+          </text>
+        </view>
+        <view class="mode-tags">
+          <text class="tag tag-blue" wx:if="{{item.acceptMode === 1 || item.acceptMode === 3}}">单人可接</text>
+          <text class="tag tag-green" wx:if="{{item.acceptMode === 2 || item.acceptMode === 3}}">团队可接</text>
+        </view>
+        <view class="task-desc">{{item.description}}</view>
+        <view class="task-meta">
+          <text class="meta-item">📍 {{item.checkpointCount}} 个打卡点</text>
+          <text class="meta-item" wx:if="{{item.deadlineText}}">⏰ 截止 {{item.deadlineText}}</text>
+        </view>
+        <view class="task-footer">
+          <text class="text-muted">已有 {{item.participantCount}} 人参与</text>
+          <text wx:if="{{item.accepted}}" class="text-success">已接单</text>
+          <text wx:elif="{{item.canAccept}}" class="text-primary">可接单</text>
+          <text wx:else class="text-muted">已结束</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我的任务 -->
+  <view wx:if="{{currentTab === 'my'}}">
+    <view wx:if="{{!isLoggedIn}}" class="empty">
+      <text>请先登录查看我的任务</text>
+      <button class="btn-primary" bindtap="goLogin">去登录</button>
+    </view>
+
+    <view wx:elif="{{myTasks.length === 0 && !loading}}" class="empty">
+      <text>暂无已接任务，去全部任务接单吧</text>
+    </view>
+
+    <view class="task-list">
+      <view
+        class="task-card card"
+        wx:for="{{myTasks}}"
+        wx:key="taskId"
+        data-id="{{item.taskId}}"
+        bindtap="goMyTaskDetail"
+      >
+        <view class="task-header">
+          <text class="task-name">{{item.name}}</text>
+          <text class="status-tag {{item.statusText === '已完成' ? 'tag-green' : (item.statusText === '已逾期' ? 'tag-red' : 'tag-blue')}}">
+            {{item.statusText}}
+          </text>
+        </view>
+        <view class="mode-tags">
+          <text class="tag {{item.participantType === 'solo' ? 'tag-blue' : 'tag-green'}}">
+            {{item.participantTypeText}}接单
+          </text>
+          <text class="tag tag-orange" wx:if="{{!item.unlocked}}">未解锁</text>
+          <text class="tag tag-green" wx:else>已解锁</text>
+        </view>
+        <view class="task-desc">{{item.description}}</view>
+        <view class="progress-section">
+          <view class="progress-info">
+            <text>完成进度</text>
+            <text class="progress-text">{{item.percentage}}% ({{item.passedCount}}/{{item.totalCheckpoints}})</text>
+          </view>
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{item.percentage}}%"></view>
+          </view>
+        </view>
+        <view class="task-meta">
+          <text class="meta-item" wx:if="{{item.deadlineText}}">⏰ 截止 {{item.deadlineText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+</view>

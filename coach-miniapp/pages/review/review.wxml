@@ -1,0 +1,23 @@
+<view class="container">
+  <view wx:if="{{taskList.length === 0}}" class="empty-state">
+    <text class="empty-text">暂无任务</text>
+  </view>
+
+  <view wx:for="{{taskList}}" wx:key="id" class="task-card card" bindtap="goDetail" data-id="{{item.id}}">
+    <view class="task-header">
+      <text class="task-title">{{item.title}}</text>
+      <text class="tag {{item.status === 'active' ? 'tag-green' : 'tag-gray'}}">
+        {{item.status === 'active' ? '进行中' : item.status === 'draft' ? '草稿' : '已结束'}}
+      </text>
+    </view>
+    <text class="task-desc">{{item.description}}</text>
+    <view class="task-meta">
+      <text class="meta-item">📍 {{item.location || '未设置'}}</text>
+      <text class="meta-item">📅 {{item.startTime || '不限'}}</text>
+    </view>
+    <view class="task-footer">
+      <text class="participant-count">参与人数：{{item.participantCount || 0}}</text>
+      <text class="check-points">打卡点：{{item.checkpointCount || 0}}个</text>
+    </view>
+  </view>
+</view>

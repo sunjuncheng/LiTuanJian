@@ -1,0 +1,133 @@
+.task-header {
+  margin-bottom: 20rpx;
+}
+
+.task-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.task-tags {
+  display: flex;
+  gap: 12rpx;
+}
+
+.section {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.section-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.point-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.point-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.point-range {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.checkpoint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.checkpoint-item {
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.checkpoint-index {
+  font-size: 24rpx;
+  color: #4A90D9;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.checkpoint-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.reference-img {
+  width: 100%;
+  height: 300rpx;
+  border-radius: 8rpx;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 16rpx;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4A90D9, #67b5f0);
+  border-radius: 8rpx;
+  transition: width 0.3s;
+}
+
+.progress-text {
+  font-size: 28rpx;
+  color: #4A90D9;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.progress-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #888;
+}
+
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 24rpx;
+  background: #fff;
+  display: flex;
+  gap: 20rpx;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.action-bar button {
+  flex: 1;
+}
+
+.ended-tip {
+  width: 100%;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 30rpx;
+  color: #999;
+}

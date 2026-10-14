@@ -1,0 +1,145 @@
+.task-info {
+  margin-bottom: 20rpx;
+}
+
+.task-name {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.task-meta {
+  display: flex;
+  gap: 30rpx;
+  font-size: 24rpx;
+  color: #888;
+  margin-bottom: 16rpx;
+}
+
+.overall-progress {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 14rpx;
+  background: #f0f0f0;
+  border-radius: 7rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #52c41a;
+  border-radius: 7rpx;
+}
+
+.progress-num {
+  font-size: 26rpx;
+  color: #52c41a;
+  font-weight: bold;
+}
+
+.tabs {
+  display: flex;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  border-radius: 8rpx;
+}
+
+.tab.active {
+  background: #2c3e50;
+  color: #fff;
+}
+
+.participant-card {
+  margin-bottom: 16rpx;
+}
+
+.p-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.team-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.p-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.p-name {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.p-progress {
+  text-align: right;
+}
+
+.p-progress-num {
+  font-size: 32rpx;
+  color: #52c41a;
+  font-weight: bold;
+}
+
+.p-actions {
+  display: flex;
+  gap: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 16rpx;
+}
+
+.mini-btn {
+  flex: 1;
+  background: #2c3e50;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 12rpx 0;
+  border-radius: 8rpx;
+  line-height: 1.5;
+}
+
+.mini-btn::after {
+  border: none;
+}
+
+.mini-btn.outline {
+  background: #fff;
+  color: #2c3e50;
+  border: 1rpx solid #2c3e50;
+}

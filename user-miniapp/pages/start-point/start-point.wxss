@@ -1,0 +1,70 @@
+.point-card {
+  text-align: center;
+  padding: 40rpx 24rpx;
+}
+
+.point-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.point-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.point-desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.range-tip {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.map-placeholder {
+  height: 400rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  font-size: 26rpx;
+}
+
+.distance-info {
+  text-align: center;
+  padding: 30rpx;
+}
+
+.distance-value {
+  font-size: 30rpx;
+  color: #fa8c16;
+}
+
+.distance-value.success {
+  color: #52c41a;
+  font-weight: bold;
+}
+
+.distance-num {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #f5222d;
+}
+
+.action-area {
+  margin-top: 40rpx;
+  padding: 0 24rpx;
+}
+
+.tip {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 20rpx;
+  line-height: 1.5;
+}

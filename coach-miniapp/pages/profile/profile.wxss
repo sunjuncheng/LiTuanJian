@@ -1,0 +1,119 @@
+.profile-header {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 50rpx 24rpx;
+  flex-direction: column;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-bottom: 16rpx;
+}
+
+.nickname {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.role-tag {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 4rpx 20rpx;
+  background: #2c3e50;
+  color: #fff;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+}
+
+.login-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.login-tip {
+  font-size: 36rpx;
+  color: #333;
+  margin-bottom: 40rpx;
+  font-weight: bold;
+  text-align: center;
+}
+
+.login-form {
+  width: 100%;
+  display: block;
+}
+
+.login-form .form-item {
+  margin-bottom: 24rpx;
+  width: 100%;
+}
+
+.login-form .form-input {
+  width: 100% !important;
+  padding: 20rpx 24rpx;
+  background: #f8f9fa;
+  border: 1rpx solid #e8e8e8;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.login-btn {
+  width: 100%;
+  margin-top: 20rpx;
+  background: #2c3e50;
+  color: #fff;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  padding: 20rpx 0;
+  border: none;
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.menu-list {
+  margin-top: 20rpx;
+  padding: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 36rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.menu-arrow {
+  color: #ccc;
+  font-size: 28rpx;
+}
+
+.logout-area {
+  margin-top: 40rpx;
+  padding: 0 24rpx;
+}

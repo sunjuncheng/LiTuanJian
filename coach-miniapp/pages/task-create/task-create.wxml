@@ -1,0 +1,123 @@
+<view class="container">
+  <view class="step-indicator">
+    <view class="step {{step >= 1 ? 'active' : ''}}">1. 基础信息</view>
+    <view class="step-line {{step >= 2 ? 'active' : ''}}"></view>
+    <view class="step {{step >= 2 ? 'active' : ''}}">2. 启动点位</view>
+    <view class="step-line {{step >= 3 ? 'active' : ''}}"></view>
+    <view class="step {{step >= 3 ? 'active' : ''}}">3. 打卡点</view>
+  </view>
+
+  <view wx:if="{{step === 1}}" class="step-content card">
+    <view class="form-item">
+      <text class="form-label">任务名称 *</text>
+      <input class="form-input" placeholder="请输入任务名称" value="{{form.name}}" data-field="name" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">任务简介</text>
+      <textarea class="form-textarea" placeholder="请输入任务简介" value="{{form.description}}" data-field="description" bindinput="onInput"></textarea>
+    </view>
+    <view class="form-item">
+      <text class="form-label">活动须知</text>
+      <textarea class="form-textarea" placeholder="请输入活动须知" value="{{form.notice}}" data-field="notice" bindinput="onInput"></textarea>
+    </view>
+    <view class="form-item">
+      <text class="form-label">最晚打卡截止时间</text>
+      <picker mode="date" value="{{form.deadline}}" bindchange="onDeadlineChange">
+        <view class="form-input">{{form.deadline || '请选择日期'}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="form-label">接单模式</text>
+      <radio-group bindchange="onAcceptModeChange">
+        <label class="radio-label">
+          <radio value="1" checked="{{form.acceptMode === 1}}" /> 仅单人接单
+        </label>
+        <label class="radio-label">
+          <radio value="2" checked="{{form.acceptMode === 2}}" /> 仅团队接单
+        </label>
+        <label class="radio-label">
+          <radio value="3" checked="{{form.acceptMode === 3}}" /> 单人+团队均可
+        </label>
+      </radio-group>
+    </view>
+    <view class="form-item">
+      <text class="form-label">人工审核</text>
+      <switch checked="{{form.needReview}}" bindchange="onReviewChange" color="#2c3e50" />
+      <text class="text-muted">开启后所有打卡照片需教练审核</text>
+    </view>
+    <button class="btn-primary" bindtap="nextStep">下一步</button>
+  </view>
+
+  <view wx:if="{{step === 2}}" class="step-content card">
+    <view class="form-item">
+      <text class="form-label">启动点名称 *</text>
+      <input class="form-input" placeholder="如：团建大本营" value="{{startPoint.name}}" data-field="name" bindinput="onStartPointInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">启动点定位 *</text>
+      <button class="btn-outline" bindtap="getCurrentLocation">获取我的当前位置</button>
+      <view class="loc-info" wx:if="{{startPoint.latitude}}">
+        <text>纬度：{{startPoint.latitude}}</text>
+        <text>经度：{{startPoint.longitude}}</text>
+      </view>
+    </view>
+    <view class="form-item">
+      <text class="form-label">定位误差范围</text>
+      <radio-group bindchange="onRangeChange">
+        <label class="radio-label">
+          <radio value="30" checked="{{startPoint.range === 30}}" /> 30米
+        </label>
+        <label class="radio-label">
+          <radio value="50" checked="{{startPoint.range === 50}}" /> 50米
+        </label>
+        <label class="radio-label">
+          <radio value="100" checked="{{startPoint.range === 100}}" /> 100米
+        </label>
+      </radio-group>
+    </view>
+    <view class="step-btns">
+      <button class="btn-outline" bindtap="prevStep">上一步</button>
+      <button class="btn-primary" bindtap="nextStep">下一步</button>
+    </view>
+  </view>
+
+  <view wx:if="{{step === 3}}" class="step-content">
+    <view class="checkpoint-list">
+      <view class="checkpoint-card card" wx:for="{{checkpoints}}" wx:key="index">
+        <view class="cp-header">
+          <text class="cp-title">任务 {{index + 1}}</text>
+          <text class="remove-btn" data-index="{{index}}" bindtap="removeCheckpoint">删除</text>
+        </view>
+        <view class="form-item">
+          <text class="form-label">打卡点名称 *</text>
+          <input class="form-input" placeholder="如：第一打卡点" value="{{item.name}}" data-index="{{index}}" data-field="name" bindinput="onCheckpointInput" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">打卡点定位 *</text>
+          <button class="btn-outline" data-index="{{index}}" bindtap="getCheckpointLocation">获取当前位置</button>
+          <view class="loc-info" wx:if="{{item.latitude}}">
+            <text>纬度：{{item.latitude}}</text>
+            <text>经度：{{item.longitude}}</text>
+          </view>
+        </view>
+        <view class="form-item">
+          <text class="form-label">官方参照图 *</text>
+          <view class="img-upload" data-index="{{index}}" bindtap="uploadReferenceImage" wx:if="{{!item.referenceImage}}">
+            <text>点击上传参照图</text>
+          </view>
+          <image class="ref-img" src="{{item.referenceImage}}" mode="aspectFill" wx:if="{{item.referenceImage}}"></image>
+        </view>
+        <view class="form-item">
+          <switch checked="{{item.requireGroupPhoto}}" data-index="{{index}}" data-field="requireGroupPhoto" bindchange="onCheckboxChange" color="#2c3e50" />
+          <text class="switch-label">需要团队全员合照</text>
+        </view>
+      </view>
+    </view>
+    <button class="btn-outline add-btn" bindtap="addCheckpoint">+ 新增打卡任务</button>
+    <view class="step-btns final-btns">
+      <button class="btn-outline" bindtap="prevStep">上一步</button>
+      <button class="btn-outline" bindtap="saveDraft">保存草稿</button>
+      <button class="btn-primary" bindtap="publishTask">立即发布</button>
+    </view>
+  </view>
+</view>

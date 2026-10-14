@@ -1,0 +1,39 @@
+<view class="container">
+  <view wx:if="{{!isLoggedIn}}" class="no-team">
+    <view class="empty-tip">请先登录后查看队伍</view>
+    <view class="team-actions">
+      <button class="btn-primary" bindtap="goLogin">去登录</button>
+    </view>
+  </view>
+
+  <view wx:elif="{{!myTeam}}" class="no-team">
+    <view class="empty-tip">你还没有加入任何队伍</view>
+    <view class="team-actions">
+      <button class="btn-primary" bindtap="createTeam">创建队伍</button>
+      <button class="btn-outline" bindtap="joinTeam">加入队伍</button>
+    </view>
+  </view>
+
+  <view wx:if="{{myTeam}}" class="team-info card">
+    <view class="team-header">
+      <text class="team-name">{{myTeam.name}}</text>
+      <text class="tag tag-blue">队长：{{myTeam.leaderName}}</text>
+    </view>
+    <view class="invite-section">
+      <text class="invite-label">队伍邀请码：</text>
+      <text class="invite-code">{{myTeam.inviteCode}}</text>
+      <text class="copy-btn" bindtap="copyCode">复制</text>
+    </view>
+    <view class="member-count">队伍成员：{{myTeam.memberCount}} 人</view>
+    <view class="member-list">
+      <view class="member-item" wx:for="{{myTeam.members}}" wx:key="id">
+        <image class="avatar" src="{{item.avatarUrl}}"></image>
+        <text class="member-name">{{item.nickname}}</text>
+        <text class="tag tag-orange" wx:if="{{item.isLeader}}">队长</text>
+      </view>
+    </view>
+    <view class="team-footer">
+      <button class="btn-outline" bindtap="leaveTeam">退出队伍</button>
+    </view>
+  </view>
+</view>
