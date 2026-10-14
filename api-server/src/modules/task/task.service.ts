@@ -271,7 +271,7 @@ export class TaskService {
         longitude: Number(cp.longitude) || 0,
         referenceImage: this.fixImageUrl(cp.referenceImage),
         status: checkin ? checkin.status : 'pending',
-        userPhoto: checkin?.photoUrl,
+        userPhoto: this.fixImageUrl(checkin?.photoUrl),
         rejectReason: checkin?.rejectReason,
       };
     });
@@ -300,7 +300,7 @@ export class TaskService {
         longitude: Number(cp.longitude) || 0,
         referenceImage: this.fixImageUrl(cp.referenceImage),
         status: checkin ? checkin.status : 'pending',
-        userPhoto: checkin?.photoUrl,
+        userPhoto: this.fixImageUrl(checkin?.photoUrl),
         userLocation: checkin
           ? { latitude: Number(checkin.latitude) || 0, longitude: Number(checkin.longitude) || 0 }
           : null,

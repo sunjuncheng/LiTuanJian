@@ -181,7 +181,7 @@ export class AdminService {
           checkpointId: cp.id,
           checkpointName: cp.name,
           status: rec?.status || 'pending',
-          photoUrl: rec?.photoUrl || '',
+          photoUrl: this.fixImageUrl(rec?.photoUrl || ''),
           checkinTime: rec?.createdAt || null,
           reviewTime: rec?.reviewTime || null,
           rejectReason: rec?.rejectReason || '',
@@ -267,10 +267,14 @@ export class AdminService {
   }
 
   async getPendingCheckins(taskId: number) {
-    return this.checkinRepo.find({
+    const checkins = await this.checkinRepo.find({
       where: { taskId, status: 'reviewing' },
       order: { createdAt: 'ASC' },
     });
+    return checkins.map((c) => ({
+      ...c,
+      photoUrl: this.fixImageUrl(c.photoUrl),
+    }));
   }
 
   async reviewCheckin(checkinId: number, status: 'passed' | 'rejected', rejectReason?: string) {

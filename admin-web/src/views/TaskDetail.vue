@@ -143,7 +143,9 @@
                 <el-button type="success" link @click="handleReview(row, 'passed')">通过</el-button>
                 <el-button type="danger" link @click="openRejectDialog(row)">驳回</el-button>
               </template>
-              <span v-else style="color: #999">已审核</span>
+              <el-tag v-else :type="checkinStatusType(row.status)" size="small">
+                {{ checkinStatusText(row.status) }}
+              </el-tag>
             </template>
           </el-table-column>
         </el-table>
