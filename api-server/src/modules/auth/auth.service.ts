@@ -6,7 +6,7 @@ import axios from 'axios';
 import { User } from '../../entities/user.entity';
 import { Coach } from '../../entities/coach.entity';
 import { Admin } from '../../entities/admin.entity';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
