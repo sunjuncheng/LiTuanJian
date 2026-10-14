@@ -35,8 +35,13 @@ export class CoachService {
     return this.coachRepo.save(coach);
   }
 
-  async update(id: number, data: { name?: string; phone?: string; status?: number }) {
-    await this.coachRepo.update(id, data);
+  async update(id: number, data: { name?: string; phone?: string; status?: number; password?: string }) {
+    const updateData: any = {};
+    if (data.name !== undefined) updateData.name = data.name;
+    if (data.phone !== undefined) updateData.phone = data.phone;
+    if (data.status !== undefined) updateData.status = data.status;
+    if (data.password) updateData.password = await bcrypt.hash(data.password, 10);
+    await this.coachRepo.update(id, updateData);
     return this.findById(id);
   }
 

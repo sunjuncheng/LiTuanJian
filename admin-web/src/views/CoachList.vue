@@ -48,8 +48,8 @@
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" />
         </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="!isEdit">
-          <el-input v-model="form.password" type="password" show-password />
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="form.password" type="password" show-password :placeholder="isEdit ? '留空则不修改密码' : '请输入密码'" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -78,7 +78,18 @@ const form = reactive({ id: '', name: '', phone: '', password: '' })
 const rules = {
   name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
   phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+  password: [
+    {
+      validator: (rule, value, callback) => {
+        if (!isEdit.value && !value) {
+          callback(new Error('请输入密码'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
 }
 
 const loadList = async () => {
@@ -114,7 +125,9 @@ const handleSubmit = async () => {
   try {
     await formRef.value.validate()
     if (isEdit.value) {
-      await updateCoach(form.id, { name: form.name, phone: form.phone })
+      const payload = { name: form.name, phone: form.phone }
+      if (form.password) payload.password = form.password
+      await updateCoach(form.id, payload)
     } else {
       await createCoach(form)
     }

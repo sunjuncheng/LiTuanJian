@@ -11,11 +11,11 @@
         </div>
       </div>
       <el-menu
-        :default-active="$route.path"
+        :default-active="activeMenu"
         router
         class="sidebar-menu"
       >
-        <el-menu-item v-for="route in menuRoutes" :key="route.path" :index="route.path">
+        <el-menu-item v-for="route in menuRoutes" :key="route.fullPath" :index="route.fullPath">
           <el-icon><component :is="route.meta.icon" /></el-icon>
           <span>{{ route.meta.title }}</span>
         </el-menu-item>
@@ -57,9 +57,10 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/store'
 
+const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 
@@ -70,6 +71,16 @@ const menuRoutes = computed(() => {
     .find(r => r.path === '/')
     .children
     .filter(r => !r.meta?.hidden)
+    .map(r => ({
+      ...r,
+      fullPath: '/' + r.path,
+    }))
+})
+
+const activeMenu = computed(() => {
+  const path = route.path
+  const matched = menuRoutes.value.find(r => path === r.fullPath || path.startsWith(r.fullPath + '/'))
+  return matched?.fullPath || path
 })
 
 const handleCommand = (command) => {

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from '../../entities/user.entity';
 import { Coach } from '../../entities/coach.entity';
 import { Task } from '../../entities/task.entity';
@@ -84,10 +85,11 @@ export class AdminService {
     return this.userRepo.findOne({ where: { id } });
   }
 
-  async updateUser(id: number, data: { nickname?: string; phone?: string }) {
+  async updateUser(id: number, data: { nickname?: string; phone?: string; password?: string }) {
     const updateData: any = {};
     if (data.nickname !== undefined) updateData.nickname = data.nickname;
     if (data.phone !== undefined) updateData.phone = data.phone;
+    if (data.password) updateData.password = await bcrypt.hash(data.password, 10);
     await this.userRepo.update(id, updateData);
     return this.userRepo.findOne({ where: { id } });
   }

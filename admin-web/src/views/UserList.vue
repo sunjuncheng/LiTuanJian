@@ -52,6 +52,9 @@
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
+        <el-form-item label="新密码" prop="password">
+          <el-input v-model="form.password" type="password" show-password placeholder="留空则不修改密码" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -74,7 +77,7 @@ const formRef = ref(null)
 const search = reactive({ keyword: '' })
 const pagination = reactive({ page: 1, pageSize: 20, total: 0 })
 
-const form = reactive({ id: '', nickname: '', phone: '' })
+const form = reactive({ id: '', nickname: '', phone: '', password: '' })
 const rules = {
   nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
   phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }]
@@ -97,13 +100,16 @@ const openEditDialog = (row) => {
   form.id = row.id
   form.nickname = row.nickname
   form.phone = row.phone
+  form.password = ''
   dialogVisible.value = true
 }
 
 const handleSubmit = async () => {
   try {
     await formRef.value.validate()
-    await updateUser(form.id, { nickname: form.nickname, phone: form.phone })
+    const payload = { nickname: form.nickname, phone: form.phone }
+    if (form.password) payload.password = form.password
+    await updateUser(form.id, payload)
     ElMessage.success('修改成功')
     dialogVisible.value = false
     loadList()
