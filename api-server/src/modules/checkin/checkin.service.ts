@@ -15,20 +15,32 @@ export class CheckinService {
   ) {}
 
   async submitCheckin(userId: number, data: any) {
+    const taskId = Number(data.taskId);
+    const checkpointId = Number(data.checkpointId);
+    if (isNaN(taskId) || isNaN(checkpointId)) {
+      throw new BadRequestException('参数无效，请重试');
+    }
+
     const participant = await this.participantRepo.findOne({
-      where: { taskId: data.taskId, userId },
+      where: { taskId, userId },
     });
     if (!participant) throw new BadRequestException('未承接该任务');
     if (!participant.unlocked) throw new BadRequestException('请先到启动点解锁任务');
 
     const checkpoint = await this.checkpointRepo.findOne({
-      where: { id: data.checkpointId, taskId: data.taskId },
+      where: { id: checkpointId, taskId },
     });
     if (!checkpoint) throw new NotFoundException('打卡点不存在');
 
+    const userLat = Number(data.latitude);
+    const userLng = Number(data.longitude);
+    if (isNaN(userLat) || isNaN(userLng)) {
+      throw new BadRequestException('位置信息无效，请重试');
+    }
+
     const result = isWithinRange(
-      data.latitude,
-      data.longitude,
+      userLat,
+      userLng,
       Number(checkpoint.latitude),
       Number(checkpoint.longitude),
       checkpoint.range,
@@ -39,8 +51,8 @@ export class CheckinService {
 
     const existing = await this.checkinRepo.findOne({
       where: {
-        taskId: data.taskId,
-        checkpointId: data.checkpointId,
+        taskId,
+        checkpointId,
         userId,
       },
     });
@@ -48,8 +60,8 @@ export class CheckinService {
     if (existing) {
       existing.photoUrl = data.photo;
       existing.remark = data.remark;
-      existing.latitude = data.latitude;
-      existing.longitude = data.longitude;
+      existing.latitude = userLat;
+      existing.longitude = userLng;
       existing.accuracy = data.accuracy;
       existing.status = 'reviewing';
       existing.rejectReason = null;
@@ -57,15 +69,15 @@ export class CheckinService {
     }
 
     const record = this.checkinRepo.create({
-      taskId: data.taskId,
-      checkpointId: data.checkpointId,
+      taskId,
+      checkpointId,
       participantId: participant.id,
       userId,
       teamId: participant.teamId,
       photoUrl: data.photo,
       remark: data.remark,
-      latitude: data.latitude,
-      longitude: data.longitude,
+      latitude: userLat,
+      longitude: userLng,
       accuracy: data.accuracy,
       status: 'reviewing',
     });

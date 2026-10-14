@@ -11,4 +11,5 @@ dist-ssr
 uploads/*
 !uploads/.gitkeep
 
+deploy/
 *.zip

@@ -5,6 +5,7 @@ import { Task } from '../../entities/task.entity';
 import { TaskCheckpoint } from '../../entities/task-checkpoint.entity';
 import { TaskParticipant } from '../../entities/task-participant.entity';
 import { CheckinRecord } from '../../entities/checkin-record.entity';
+import { User } from '../../entities/user.entity';
 import { isWithinRange } from '../../common/utils/location';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class TaskService {
     @InjectRepository(TaskCheckpoint) private checkpointRepo: Repository<TaskCheckpoint>,
     @InjectRepository(TaskParticipant) private participantRepo: Repository<TaskParticipant>,
     @InjectRepository(CheckinRecord) private checkinRepo: Repository<CheckinRecord>,
+    @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
   async getPublicTasks(userId?: number) {
@@ -79,21 +81,23 @@ export class TaskService {
   }
 
   async getTaskDetail(taskId: number) {
-    const task = await this.taskRepo.findOne({ where: { id: taskId } });
+    const id = Number(taskId);
+    if (isNaN(id)) throw new BadRequestException('任务ID无效');
+    const task = await this.taskRepo.findOne({ where: { id } });
     if (!task) throw new NotFoundException('任务不存在');
     const checkpoints = await this.checkpointRepo.find({
-      where: { taskId },
+      where: { taskId: id },
       order: { sortOrder: 'ASC' },
     });
-    const participantCount = await this.participantRepo.count({ where: { taskId } });
+    const participantCount = await this.participantRepo.count({ where: { taskId: id } });
     const now = new Date();
     const isEnded = task.deadline ? new Date(task.deadline) < now : false;
     return {
       ...task,
       checkpoints: checkpoints.map((cp) => ({
         ...cp,
-        latitude: Number(cp.latitude),
-        longitude: Number(cp.longitude),
+        latitude: Number(cp.latitude) || 0,
+        longitude: Number(cp.longitude) || 0,
         referenceImage: this.fixImageUrl(cp.referenceImage),
       })),
       participantCount,
@@ -102,8 +106,8 @@ export class TaskService {
       canAccept: task.status === 'published' && !isEnded,
       startPoint: {
         name: task.startPointName,
-        latitude: Number(task.startPointLat),
-        longitude: Number(task.startPointLng),
+        latitude: Number(task.startPointLat) || 0,
+        longitude: Number(task.startPointLng) || 0,
         range: task.startPointRange,
       },
     };
@@ -169,7 +173,9 @@ export class TaskService {
   }
 
   async acceptTask(taskId: number, userId: number, mode: string, teamId?: number) {
-    const task = await this.taskRepo.findOne({ where: { id: taskId } });
+    const id = Number(taskId);
+    if (isNaN(id)) throw new BadRequestException('任务ID无效');
+    const task = await this.taskRepo.findOne({ where: { id } });
     if (!task) throw new NotFoundException('任务不存在');
     if (task.status !== 'published') throw new BadRequestException('任务未发布');
     const now = new Date();
@@ -177,11 +183,11 @@ export class TaskService {
       throw new BadRequestException('任务已结束，无法接单');
     }
 
-    const existing = await this.participantRepo.findOne({ where: { taskId, userId } });
+    const existing = await this.participantRepo.findOne({ where: { taskId: id, userId } });
     if (existing) throw new BadRequestException('已承接该任务');
 
     const participant = this.participantRepo.create({
-      taskId,
+      taskId: id,
       userId,
       teamId: mode === 'team' ? teamId : null,
       participantType: mode,
@@ -191,10 +197,12 @@ export class TaskService {
   }
 
   async unlockTask(taskId: number, userId: number, location: { latitude: number; longitude: number }) {
-    const task = await this.taskRepo.findOne({ where: { id: taskId } });
+    const id = Number(taskId);
+    if (isNaN(id)) throw new BadRequestException('任务ID无效');
+    const task = await this.taskRepo.findOne({ where: { id } });
     if (!task) throw new NotFoundException('任务不存在');
 
-    const participant = await this.participantRepo.findOne({ where: { taskId, userId } });
+    const participant = await this.participantRepo.findOne({ where: { taskId: id, userId } });
     if (!participant) throw new BadRequestException('未承接该任务');
     if (participant.unlocked) return { unlocked: true, message: '已解锁' };
 
@@ -226,11 +234,13 @@ export class TaskService {
   }
 
   async getMyProgress(taskId: number, userId: number) {
-    const participant = await this.participantRepo.findOne({ where: { taskId, userId } });
+    const id = Number(taskId);
+    if (isNaN(id)) throw new BadRequestException('任务ID无效');
+    const participant = await this.participantRepo.findOne({ where: { taskId: id, userId } });
     if (!participant) return null;
 
-    const totalCheckpoints = await this.checkpointRepo.count({ where: { taskId } });
-    const checkins = await this.checkinRepo.find({ where: { taskId, userId } });
+    const totalCheckpoints = await this.checkpointRepo.count({ where: { taskId: id } });
+    const checkins = await this.checkinRepo.find({ where: { taskId: id, userId } });
     const passedCount = checkins.filter((c) => c.status === 'passed').length;
     const reviewingCount = checkins.filter((c) => c.status === 'reviewing').length;
     const pendingCount = totalCheckpoints - passedCount - reviewingCount;
@@ -245,18 +255,20 @@ export class TaskService {
   }
 
   async getTaskCheckpoints(taskId: number, userId: number) {
+    const id = Number(taskId);
+    if (isNaN(id)) throw new BadRequestException('任务ID无效');
     const checkpoints = await this.checkpointRepo.find({
-      where: { taskId },
+      where: { taskId: id },
       order: { sortOrder: 'ASC' },
     });
-    const checkins = await this.checkinRepo.find({ where: { taskId, userId } });
+    const checkins = await this.checkinRepo.find({ where: { taskId: id, userId } });
 
     return checkpoints.map((cp) => {
       const checkin = checkins.find((c) => c.checkpointId === cp.id);
       return {
         ...cp,
-        latitude: Number(cp.latitude),
-        longitude: Number(cp.longitude),
+        latitude: Number(cp.latitude) || 0,
+        longitude: Number(cp.longitude) || 0,
         referenceImage: this.fixImageUrl(cp.referenceImage),
         status: checkin ? checkin.status : 'pending',
         userPhoto: checkin?.photoUrl,
@@ -266,28 +278,31 @@ export class TaskService {
   }
 
   async getReviewCheckpoints(taskId: number, participantId: number) {
+    const id = Number(taskId);
+    const pId = Number(participantId);
+    if (isNaN(id) || isNaN(pId)) throw new BadRequestException('参数无效');
     const checkpoints = await this.checkpointRepo.find({
-      where: { taskId },
+      where: { taskId: id },
       order: { sortOrder: 'ASC' },
     });
-    const participant = await this.participantRepo.findOne({ where: { id: participantId } });
+    const participant = await this.participantRepo.findOne({ where: { id: pId } });
     if (!participant) throw new NotFoundException('参与者不存在');
 
     const checkins = await this.checkinRepo.find({
-      where: { taskId, userId: participant.userId },
+      where: { taskId: id, userId: participant.userId },
     });
 
     return checkpoints.map((cp) => {
       const checkin = checkins.find((c) => c.checkpointId === cp.id);
       return {
         ...cp,
-        latitude: Number(cp.latitude),
-        longitude: Number(cp.longitude),
+        latitude: Number(cp.latitude) || 0,
+        longitude: Number(cp.longitude) || 0,
         referenceImage: this.fixImageUrl(cp.referenceImage),
         status: checkin ? checkin.status : 'pending',
         userPhoto: checkin?.photoUrl,
         userLocation: checkin
-          ? { latitude: Number(checkin.latitude), longitude: Number(checkin.longitude) }
+          ? { latitude: Number(checkin.latitude) || 0, longitude: Number(checkin.longitude) || 0 }
           : null,
         submitTime: checkin?.createdAt,
         rejectReason: checkin?.rejectReason,
@@ -296,11 +311,17 @@ export class TaskService {
   }
 
   async reviewCheckin(body: any, status: string) {
+    const taskId = Number(body.taskId);
+    const checkpointId = Number(body.checkpointId);
+    const participantId = Number(body.participantId);
+    if (isNaN(taskId) || isNaN(checkpointId) || isNaN(participantId)) {
+      throw new BadRequestException('参数无效');
+    }
     const checkin = await this.checkinRepo.findOne({
       where: {
-        taskId: body.taskId,
-        checkpointId: body.checkpointId,
-        participantId: body.participantId,
+        taskId,
+        checkpointId,
+        participantId,
       },
       order: { createdAt: 'DESC' },
     });
@@ -315,17 +336,40 @@ export class TaskService {
   }
 
   async getTaskParticipants(taskId: number) {
+    const id = Number(taskId);
+    if (isNaN(id)) throw new BadRequestException('任务ID无效');
     const participants = await this.participantRepo.find({
-      where: { taskId, participantType: 'solo' },
+      where: { taskId: id, participantType: 'solo' },
     });
-    return participants;
+    const totalCheckpoints = await this.checkpointRepo.count({ where: { taskId: id } });
+    const checkins = await this.checkinRepo.find({ where: { taskId: id } });
+    const result = [];
+    for (const p of participants) {
+      const user = await this.userRepo.findOne({ where: { id: p.userId } });
+      const userCheckins = checkins.filter((c) => c.userId === p.userId);
+      const passedCount = userCheckins.filter((c) => c.status === 'passed').length;
+      const completionRate = totalCheckpoints > 0 ? Math.round((passedCount / totalCheckpoints) * 100) : 0;
+      result.push({
+        id: p.id,
+        userId: p.userId,
+        nickname: user?.nickname || '未知用户',
+        avatarUrl: user?.avatarUrl || '',
+        unlocked: p.unlocked,
+        status: p.status,
+        statusText: p.status === 'completed' ? '已完成' : (p.status === 'overdue' ? '已逾期' : '进行中'),
+        completionRate,
+      });
+    }
+    return result;
   }
 
   async getTaskTeams(taskId: number) {
+    const id = Number(taskId);
+    if (isNaN(id)) throw new BadRequestException('任务ID无效');
     const participants = await this.participantRepo.find({
-      where: { taskId, participantType: 'team' },
+      where: { taskId: id, participantType: 'team' },
     });
-    const teamIds = [...new Set(participants.map((p) => p.teamId))];
+    const teamIds = [...new Set(participants.map((p) => p.teamId).filter(Boolean))];
     return teamIds.map((teamId) => ({
       id: teamId,
       name: `队伍${teamId}`,
@@ -336,7 +380,10 @@ export class TaskService {
   }
 
   async manualUnlock(taskId: number, participantId: number) {
-    const participant = await this.participantRepo.findOne({ where: { id: participantId, taskId } });
+    const id = Number(taskId);
+    const pId = Number(participantId);
+    if (isNaN(id) || isNaN(pId)) throw new BadRequestException('参数无效');
+    const participant = await this.participantRepo.findOne({ where: { id: pId, taskId: id } });
     if (!participant) throw new NotFoundException('参与者不存在');
     participant.unlocked = true;
     participant.unlockTime = new Date();

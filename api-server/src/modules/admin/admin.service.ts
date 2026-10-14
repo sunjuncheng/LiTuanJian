@@ -27,10 +27,33 @@ export class AdminService {
       this.coachRepo.count(),
     ]);
     const publishedTasks = await this.taskRepo.count({ where: { status: 'published' } });
-    const recentTasks = await this.taskRepo.find({
+    const tasks = await this.taskRepo.find({
       order: { createdAt: 'DESC' },
       take: 10,
     });
+    const recentTasks = [];
+    for (const task of tasks) {
+      const checkpointCount = await this.checkpointRepo.count({ where: { taskId: task.id } });
+      const participants = await this.participantRepo.find({ where: { taskId: task.id } });
+      const participantCount = participants.length;
+      const checkins = await this.checkinRepo.find({ where: { taskId: task.id } });
+      let completionRate = 0;
+      if (participantCount > 0 && checkpointCount > 0) {
+        let totalPercent = 0;
+        for (const p of participants) {
+          const userCheckins = checkins.filter((c) => c.userId === p.userId);
+          const userPassed = userCheckins.filter((c) => c.status === 'passed').length;
+          totalPercent += Math.round((userPassed / checkpointCount) * 100);
+        }
+        completionRate = Math.round(totalPercent / participantCount);
+      }
+      recentTasks.push({
+        ...task,
+        checkpointCount,
+        participantCount,
+        completionRate,
+      });
+    }
     return {
       stats: [
         { label: '总用户数', value: userCount, color: '#409eff' },

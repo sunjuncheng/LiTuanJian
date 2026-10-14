@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AppModule } from './app.module';
@@ -7,6 +7,14 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
+  process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
+    Logger.error(`Unhandled Rejection: ${reason?.message || reason}`, reason?.stack, 'Process');
+  });
+
+  process.on('uncaughtException', (err: Error) => {
+    Logger.error(`Uncaught Exception: ${err.message}`, err.stack, 'Process');
+  });
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
