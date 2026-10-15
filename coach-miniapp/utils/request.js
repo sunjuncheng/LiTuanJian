@@ -12,19 +12,27 @@ const request = (options) => {
         'Authorization': token ? 'Bearer ' + token : ''
       },
       success: (res) => {
-        if (res.statusCode === 200) {
-          if (res.data.code === 0) {
-            resolve(res.data.data)
-          } else if (res.data.code === 401) {
-            wx.removeStorageSync('coach_token')
-            wx.removeStorageSync('coach_info')
-            app.globalData.token = ''
-            app.globalData.coachInfo = null
-            wx.switchTab({ url: '/pages/profile/profile' })
-            reject(res.data)
+        const silent = options.silent
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          const body = res.data
+          if (body && typeof body === 'object' && body.code !== undefined) {
+            if (body.code === 0) {
+              resolve(body.data)
+            } else if (body.code === 401) {
+              wx.removeStorageSync('coach_token')
+              wx.removeStorageSync('coach_info')
+              app.globalData.token = ''
+              app.globalData.coachInfo = null
+              wx.switchTab({ url: '/pages/profile/profile' })
+              reject(body)
+            } else {
+              if (!silent) {
+                wx.showToast({ title: body.msg || '请求失败', icon: 'none' })
+              }
+              reject(body)
+            }
           } else {
-            wx.showToast({ title: res.data.msg || '请求失败', icon: 'none' })
-            reject(res.data)
+            resolve(body)
           }
         } else if (res.statusCode === 401) {
           wx.removeStorageSync('coach_token')
@@ -34,22 +42,27 @@ const request = (options) => {
           wx.switchTab({ url: '/pages/profile/profile' })
           reject(res)
         } else {
-          const errMsg = (res.data && res.data.msg) || '网络请求失败'
-          wx.showToast({ title: errMsg, icon: 'none' })
+          const body = res.data
+          const errMsg = (body && body.msg) || '网络请求失败(' + res.statusCode + ')'
+          if (!silent) {
+            wx.showToast({ title: errMsg, icon: 'none' })
+          }
           reject(res)
         }
       },
       fail: (err) => {
-        wx.showToast({ title: '网络连接失败', icon: 'none' })
+        if (!options.silent) {
+          wx.showToast({ title: '网络连接失败', icon: 'none' })
+        }
         reject(err)
       }
     })
   })
 }
 
-const get = (url, data) => request({ url, method: 'GET', data })
-const post = (url, data) => request({ url, method: 'POST', data })
-const put = (url, data) => request({ url, method: 'PUT', data })
-const del = (url, data) => request({ url, method: 'DELETE', data })
+const get = (url, data, options = {}) => request({ url, method: 'GET', data, ...options })
+const post = (url, data, options = {}) => request({ url, method: 'POST', data, ...options })
+const put = (url, data, options = {}) => request({ url, method: 'PUT', data, ...options })
+const del = (url, data, options = {}) => request({ url, method: 'DELETE', data, ...options })
 
 module.exports = { request, get, post, put, del }

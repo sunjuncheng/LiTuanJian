@@ -1,8 +1,12 @@
 <view class="container">
   <view class="profile-header card">
-    <view wx:if="{{isLoggedIn}}">
-      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}"></image>
-      <text class="nickname">{{userInfo.nickname}}</text>
+    <view wx:if="{{isLoggedIn}}" class="user-info" bindtap="goEditProfile">
+      <image class="avatar" src="{{userInfo.avatarUrl || defaultAvatar}}" mode="aspectFill"></image>
+      <view class="user-meta">
+        <text class="nickname">{{userInfo.nickname}}</text>
+        <text class="user-phone">{{userInfo.phone}}</text>
+      </view>
+      <text class="edit-arrow">›</text>
     </view>
     <view wx:elif="{{showLoginForm}}" class="login-form">
       <view class="form-tabs">
@@ -36,12 +40,12 @@
       <text class="menu-text">我的任务</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item">
+    <view class="menu-item" bindtap="goRecords">
       <text class="menu-icon">🏆</text>
       <text class="menu-text">完成记录</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item">
+    <view class="menu-item" bindtap="goSettings">
       <text class="menu-icon">⚙️</text>
       <text class="menu-text">设置</text>
       <text class="menu-arrow">></text>

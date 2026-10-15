@@ -21,6 +21,16 @@
       <textarea class="form-textarea" placeholder="请输入活动须知" value="{{form.notice}}" data-field="notice" bindinput="onInput"></textarea>
     </view>
     <view class="form-item">
+      <text class="form-label">任务封面图</text>
+      <view class="cover-upload" bindtap="uploadCoverImage">
+        <image wx:if="{{form.coverImage}}" class="cover-preview" src="{{form.coverImage}}" mode="aspectFill"></image>
+        <view wx:else class="cover-placeholder">
+          <text class="cover-icon">📷</text>
+          <text class="cover-text">点击上传封面图</text>
+        </view>
+      </view>
+    </view>
+    <view class="form-item">
       <text class="form-label">最晚打卡截止时间</text>
       <picker mode="date" value="{{form.deadline}}" bindchange="onDeadlineChange">
         <view class="form-input">{{form.deadline || '请选择日期'}}</view>
@@ -30,19 +40,20 @@
       <text class="form-label">接单模式</text>
       <radio-group bindchange="onAcceptModeChange">
         <label class="radio-label">
-          <radio value="1" checked="{{form.acceptMode === 1}}" /> 仅单人接单
+          <radio value="1" checked="{{form.acceptMode === 1}}" /> 仅个人接单
         </label>
         <label class="radio-label">
           <radio value="2" checked="{{form.acceptMode === 2}}" /> 仅团队接单
         </label>
-        <label class="radio-label">
-          <radio value="3" checked="{{form.acceptMode === 3}}" /> 单人+团队均可
-        </label>
       </radio-group>
+    </view>
+    <view class="form-item" wx:if="{{form.acceptMode === 2}}">
+      <text class="form-label">最低团队人数</text>
+      <input class="form-input" type="number" placeholder="至少2人" value="{{form.minTeamSize}}" data-field="minTeamSize" bindinput="onInput" />
     </view>
     <view class="form-item">
       <text class="form-label">人工审核</text>
-      <switch checked="{{form.needReview}}" bindchange="onReviewChange" color="#2c3e50" />
+      <switch checked="{{form.needReview}}" bindchange="onReviewChange" color="#FF6B35" />
       <text class="text-muted">开启后所有打卡照片需教练审核</text>
     </view>
     <button class="btn-primary" bindtap="nextStep">下一步</button>
@@ -108,7 +119,7 @@
           <image class="ref-img" src="{{item.referenceImage}}" mode="aspectFill" wx:if="{{item.referenceImage}}"></image>
         </view>
         <view class="form-item">
-          <switch checked="{{item.requireGroupPhoto}}" data-index="{{index}}" data-field="requireGroupPhoto" bindchange="onCheckboxChange" color="#2c3e50" />
+          <switch checked="{{item.requireGroupPhoto}}" data-index="{{index}}" data-field="requireGroupPhoto" bindchange="onCheckboxChange" color="#FF6B35" />
           <text class="switch-label">需要团队全员合照</text>
         </view>
       </view>

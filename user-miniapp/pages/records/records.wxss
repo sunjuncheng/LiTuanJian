@@ -1,0 +1,60 @@
+.record-list {
+  margin-top: 10rpx;
+}
+
+.record-card {
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: 20rpx;
+}
+
+.record-cover {
+  position: relative;
+  width: 100%;
+  height: 200rpx;
+  overflow: hidden;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+}
+
+.cover-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%);
+}
+
+.record-name {
+  position: absolute;
+  bottom: 20rpx;
+  left: 24rpx;
+  right: 24rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.record-body {
+  padding: 20rpx 24rpx;
+}
+
+.record-tags {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.record-meta {
+  display: flex;
+  gap: 30rpx;
+}
+
+.meta-item {
+  font-size: 24rpx;
+  color: #999;
+}

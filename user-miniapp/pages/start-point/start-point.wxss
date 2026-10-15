@@ -1,6 +1,8 @@
 .point-card {
   text-align: center;
-  padding: 40rpx 24rpx;
+  padding: 50rpx 24rpx;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF4757 100%);
+  color: #fff;
 }
 
 .point-icon {
@@ -9,21 +11,24 @@
 }
 
 .point-name {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
+  font-size: 38rpx;
+  font-weight: 700;
   margin-bottom: 12rpx;
 }
 
 .point-desc {
   font-size: 26rpx;
-  color: #666;
+  opacity: 0.9;
   margin-bottom: 12rpx;
 }
 
 .range-tip {
   font-size: 24rpx;
-  color: #999;
+  opacity: 0.8;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6rpx 20rpx;
+  border-radius: 16rpx;
 }
 
 .map-placeholder {
@@ -31,8 +36,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ccc;
+  color: #bbb;
   font-size: 26rpx;
+  background: #F8F9FB;
+  border: 2rpx dashed #e0e0e0;
 }
 
 .distance-info {
@@ -42,18 +49,19 @@
 
 .distance-value {
   font-size: 30rpx;
-  color: #fa8c16;
+  color: #FF6B35;
+  font-weight: 500;
 }
 
 .distance-value.success {
-  color: #52c41a;
-  font-weight: bold;
+  color: #6BCB77;
+  font-weight: 700;
 }
 
 .distance-num {
   font-size: 48rpx;
-  font-weight: bold;
-  color: #f5222d;
+  font-weight: 800;
+  color: #FF4757;
 }
 
 .action-area {

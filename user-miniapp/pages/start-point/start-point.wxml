@@ -19,7 +19,7 @@
     </view>
   </view>
 
-  <view class="action-area" wx:if="{{!unlocked}}">
+  <view class="action-area" wx:if="{{!unlocked && !task.isEnded}}">
     <button
       class="btn-primary"
       bindtap="checkLocation"
@@ -31,7 +31,11 @@
     <view class="tip">需到达启动点位后上传定位，匹配成功即可解锁全部打卡任务</view>
   </view>
 
-  <view class="action-area" wx:if="{{unlocked}}">
+  <view class="action-area" wx:if="{{unlocked && !task.isEnded}}">
     <button class="btn-primary" bindtap="goCheckin">开始打卡</button>
+  </view>
+
+  <view class="action-area" wx:if="{{task.isEnded}}">
+    <view class="ended-tip">任务已过时，无法继续操作</view>
   </view>
 </view>

@@ -1,0 +1,35 @@
+<view class="container">
+  <view wx:if="{{records.length === 0 && !loading}}" class="empty">
+    <view class="empty-icon">🏆</view>
+    <text>暂无完成记录</text>
+    <text class="empty-sub">完成任务后会显示在这里</text>
+  </view>
+
+  <view class="record-list" wx:else>
+    <view
+      class="record-card card"
+      wx:for="{{records}}"
+      wx:key="taskId"
+      data-id="{{item.taskId}}"
+      bindtap="goDetail"
+    >
+      <view class="record-cover">
+        <image class="cover-img" src="{{item.coverImage || defaultCover}}" mode="aspectFill"></image>
+        <view class="cover-mask"></view>
+        <view class="record-name">{{item.name}}</view>
+      </view>
+      <view class="record-body">
+        <view class="record-tags">
+          <text class="tag tag-green">已完成</text>
+          <text class="tag {{item.participantType === 'solo' ? 'tag-orange' : 'tag-green'}}">
+            {{item.participantTypeText}}
+          </text>
+        </view>
+        <view class="record-meta">
+          <text class="meta-item">✅ 完成度 {{item.percentage}}%</text>
+          <text class="meta-item">📍 {{item.passedCount}}/{{item.totalCheckpoints}} 打卡点</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

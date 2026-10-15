@@ -23,6 +23,9 @@ export class Task {
   @Column({ name: 'notice', type: 'text', nullable: true })
   notice: string;
 
+  @Column({ name: 'cover_image', type: 'text', nullable: true })
+  coverImage: string;
+
   @Column({ name: 'deadline', type: 'datetime', nullable: true })
   deadline: Date;
 
@@ -33,6 +36,9 @@ export class Task {
     comment: '1仅单人 2仅团队 3均可',
   })
   acceptMode: number;
+
+  @Column({ name: 'min_team_size', default: 2 })
+  minTeamSize: number;
 
   @Column({ name: 'need_review', default: true })
   needReview: boolean;

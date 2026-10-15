@@ -28,6 +28,10 @@ Page({
 
   async checkLocation() {
     if (this.data.checking) return
+    if (this.data.task && this.data.task.isEnded) {
+      wx.showToast({ title: '任务已过时，无法解锁', icon: 'none' })
+      return
+    }
     this.setData({ checking: true })
     wx.showLoading({ title: '定位中...' })
     try {
@@ -68,7 +72,7 @@ Page({
         latitude: loc.latitude,
         longitude: loc.longitude,
         accuracy: loc.accuracy
-      })
+      }, { silent: true })
       wx.hideLoading()
       this.setData({ unlocked: true })
       wx.showModal({

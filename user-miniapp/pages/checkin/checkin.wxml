@@ -30,6 +30,11 @@
       <image class="reference-img" src="{{checkpoints[currentIndex].referenceImage}}" mode="aspectFill"></image>
       <view class="reference-tip">请参照上图角度、场景、构图拍照</view>
     </view>
+    <view class="reference-section" wx:else>
+      <view class="section-label">官方参照图</view>
+      <image class="reference-img" src="{{defaultImage}}" mode="aspectFill"></image>
+      <view class="reference-tip">暂无参照图，请按实际场景拍照</view>
+    </view>
 
     <view class="photo-section">
       <view class="section-label">我的打卡照片</view>
@@ -57,7 +62,7 @@
     </view>
   </view>
 
-  <view class="submit-bar">
+  <view class="submit-bar" wx:if="{{!isEnded}}">
     <button
       class="btn-primary"
       bindtap="submitCheckin"
@@ -66,5 +71,9 @@
     >
       提交打卡
     </button>
+  </view>
+
+  <view class="submit-bar" wx:if="{{isEnded}}">
+    <view class="ended-tip">任务已过时，无法继续打卡</view>
   </view>
 </view>

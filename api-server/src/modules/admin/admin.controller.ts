@@ -104,4 +104,18 @@ export class AdminController {
   updateSystemConfig(@Body() body) {
     return this.adminService.updateSystemConfig(body);
   }
+
+  @Get('teams')
+  getTeamList(@Query() query) {
+    return this.adminService.getTeamList({
+      page: Number(query.page) || 1,
+      pageSize: Number(query.pageSize) || 20,
+      keyword: query.keyword,
+    });
+  }
+
+  @Delete('teams/:id')
+  deleteTeam(@Param('id') id: number) {
+    return this.adminService.deleteTeam(id);
+  }
 }

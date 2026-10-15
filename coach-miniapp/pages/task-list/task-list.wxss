@@ -2,22 +2,32 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24rpx;
+  margin-bottom: 32rpx;
 }
 
 .page-title {
-  font-size: 36rpx;
+  display: block;
+  font-size: 40rpx;
   font-weight: bold;
-  color: #333;
+  color: #1A1A1A;
+  margin-bottom: 6rpx;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
 }
 
 .create-btn {
-  background: #2c3e50;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF4757 100%);
   color: #fff;
   font-size: 26rpx;
-  padding: 12rpx 28rpx;
+  font-weight: 600;
+  padding: 16rpx 32rpx;
   border-radius: 32rpx;
   line-height: 1.5;
+  box-shadow: 0 6rpx 16rpx rgba(255, 71, 87, 0.3);
 }
 
 .create-btn::after {
@@ -25,7 +35,7 @@
 }
 
 .task-card {
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
 }
 
 .task-header {
@@ -38,61 +48,36 @@
 .task-name {
   font-size: 32rpx;
   font-weight: bold;
-  color: #333;
+  color: #1A1A1A;
+  flex: 1;
+  margin-right: 16rpx;
 }
 
 .task-meta {
   display: flex;
-  gap: 30rpx;
+  gap: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.meta-item {
   font-size: 24rpx;
   color: #888;
-  margin-bottom: 16rpx;
 }
 
 .task-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 16rpx;
+  gap: 32rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F0F0F0;
 }
 
-.btn-sm {
-  font-size: 24rpx;
-  padding: 8rpx 32rpx;
-  line-height: 1.5;
-  border-color: #ff4d4f;
-  color: #ff4d4f;
-  background: #fff;
+.action-link {
+  font-size: 26rpx;
+  color: #FF6B35;
+  font-weight: 500;
 }
 
-.task-progress {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-}
-
-.progress-bar {
-  flex: 1;
-  height: 12rpx;
-  background: #f0f0f0;
-  border-radius: 6rpx;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: #52c41a;
-  border-radius: 6rpx;
-}
-
-.progress-text {
-  font-size: 24rpx;
-  color: #52c41a;
-  font-weight: bold;
-}
-
-.empty {
-  text-align: center;
-  padding: 120rpx 0;
-  color: #999;
-  font-size: 28rpx;
+.action-link.danger {
+  color: #FF4757;
 }

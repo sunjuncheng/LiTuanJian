@@ -5,18 +5,23 @@
     "pages/team/team",
     "pages/start-point/start-point",
     "pages/checkin/checkin",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/profile-edit/profile-edit",
+    "pages/change-password/change-password",
+    "pages/records/records",
+    "pages/settings/settings"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#4A90D9",
+    "navigationBarBackgroundColor": "#FF6B35",
     "navigationBarTitleText": "团建打卡",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f5f5f5"
+    "backgroundColor": "#F5F6F8"
   },
   "tabBar": {
+    "custom": true,
     "color": "#999999",
-    "selectedColor": "#4A90D9",
+    "selectedColor": "#FF6B35",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [

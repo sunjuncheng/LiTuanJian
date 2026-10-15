@@ -41,8 +41,10 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { getSystemConfig, updateSystemConfig } from '@/api'
+import { useUserStore } from '@/store'
 
 const saving = ref(false)
+const userStore = useUserStore()
 const form = reactive({
   systemName: '',
   userWxAppId: '',
@@ -66,6 +68,7 @@ const handleSave = async () => {
   saving.value = true
   try {
     await updateSystemConfig(form)
+    userStore.setSystemName(form.systemName)
     ElMessage.success('保存成功')
   } catch (e) {
     console.error(e)

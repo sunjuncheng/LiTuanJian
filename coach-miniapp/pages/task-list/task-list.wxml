@@ -1,10 +1,14 @@
 <view class="container">
   <view class="page-header">
-    <text class="page-title">任务管理</text>
-    <button class="create-btn" bindtap="goCreate">+ 新建任务</button>
+    <view>
+      <text class="page-title">🏃 任务管理</text>
+      <text class="page-subtitle">创建并管理团建打卡任务</text>
+    </view>
+    <button class="create-btn" bindtap="goCreate">+ 新建</button>
   </view>
 
-  <view wx:if="{{taskList.length === 0}}" class="empty">
+  <view wx:if="{{taskList.length === 0 && !loading}}" class="empty">
+    <view class="empty-icon">📋</view>
     <text>暂无任务，点击右上角新建</text>
   </view>
 
@@ -21,12 +25,17 @@
         </text>
       </view>
       <view class="task-meta" data-id="{{item.id}}" bindtap="goDetail">
-        <text>📍 {{item.checkpointCount}} 个打卡点</text>
-        <text>👥 {{item.participantCount}} 人参与</text>
+        <text class="meta-item">📍 {{item.checkpointCount}} 个打卡点</text>
+        <text class="meta-item">👥 {{item.participantCount}} 人参与</text>
       </view>
       <view class="task-actions">
-        <button class="btn-outline btn-sm" data-id="{{item.id}}" bindtap="deleteTask">删除</button>
+        <view class="action-link" data-id="{{item.id}}" bindtap="goDetail">查看详情</view>
+        <view class="action-link danger" data-id="{{item.id}}" bindtap="deleteTask">删除</view>
       </view>
     </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
   </view>
 </view>

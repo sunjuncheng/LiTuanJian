@@ -6,6 +6,8 @@ import axios from 'axios';
 import { User } from '../../entities/user.entity';
 import { Coach } from '../../entities/coach.entity';
 import { Admin } from '../../entities/admin.entity';
+import { fixImageUrl } from '../../common/utils/image';
+import { SystemConfigService } from '../system-config/system-config.service';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -15,6 +17,7 @@ export class AuthService {
     @InjectRepository(User) private userRepo: Repository<User>,
     @InjectRepository(Coach) private coachRepo: Repository<Coach>,
     @InjectRepository(Admin) private adminRepo: Repository<Admin>,
+    private configService: SystemConfigService,
   ) {}
 
   async wxLogin(code: string, appId: string, secret: string) {
@@ -28,8 +31,8 @@ export class AuthService {
   }
 
   async userWxLogin(code: string) {
-    const appId = process.env.WX_USER_APPID;
-    const secret = process.env.WX_USER_SECRET;
+    const appId = this.configService.get('userWxAppId');
+    const secret = this.configService.get('userWxAppSecret');
     const { openid } = await this.wxLogin(code, appId, secret);
 
     let user = await this.userRepo.findOne({ where: { openid } });
@@ -49,14 +52,14 @@ export class AuthService {
       userInfo: {
         id: user.id,
         nickname: user.nickname,
-        avatarUrl: user.avatarUrl,
+        avatarUrl: fixImageUrl(user.avatarUrl),
       },
     };
   }
 
   async coachWxLogin(code: string) {
-    const appId = process.env.WX_COACH_APPID;
-    const secret = process.env.WX_COACH_SECRET;
+    const appId = this.configService.get('coachWxAppId');
+    const secret = this.configService.get('coachWxAppSecret');
     const { openid } = await this.wxLogin(code, appId, secret);
 
     let coach = await this.coachRepo.findOne({ where: { openid } });
@@ -78,14 +81,14 @@ export class AuthService {
       coachInfo: {
         id: coach.id,
         name: coach.name,
-        avatarUrl: coach.avatarUrl,
+        avatarUrl: fixImageUrl(coach.avatarUrl),
       },
     };
   }
 
   async coachBindWx(code: string, phone: string, password: string) {
-    const appId = process.env.WX_COACH_APPID;
-    const secret = process.env.WX_COACH_SECRET;
+    const appId = this.configService.get('coachWxAppId');
+    const secret = this.configService.get('coachWxAppSecret');
     const { openid } = await this.wxLogin(code, appId, secret);
 
     const coach = await this.coachRepo.findOne({ where: { phone } });
@@ -114,7 +117,7 @@ export class AuthService {
       coachInfo: {
         id: coach.id,
         name: coach.name,
-        avatarUrl: coach.avatarUrl,
+        avatarUrl: fixImageUrl(coach.avatarUrl),
       },
     };
   }
@@ -142,7 +145,7 @@ export class AuthService {
       coachInfo: {
         id: coach.id,
         name: coach.name,
-        avatarUrl: coach.avatarUrl,
+        avatarUrl: fixImageUrl(coach.avatarUrl),
       },
     };
   }
@@ -172,7 +175,7 @@ export class AuthService {
       userInfo: {
         id: user.id,
         nickname: user.nickname,
-        avatarUrl: user.avatarUrl,
+        avatarUrl: fixImageUrl(user.avatarUrl),
       },
     };
   }
@@ -197,7 +200,7 @@ export class AuthService {
       userInfo: {
         id: saved.id,
         nickname: saved.nickname,
-        avatarUrl: saved.avatarUrl,
+        avatarUrl: fixImageUrl(saved.avatarUrl),
       },
     };
   }

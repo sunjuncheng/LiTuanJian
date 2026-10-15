@@ -44,6 +44,12 @@ const routes = [
         meta: { title: '教练管理', icon: 'Avatar' }
       },
       {
+        path: 'teams',
+        name: 'TeamList',
+        component: () => import('@/views/TeamList.vue'),
+        meta: { title: '队伍管理', icon: 'UserFilled' }
+      },
+      {
         path: 'settings',
         name: 'Settings',
         component: () => import('@/views/SystemSettings.vue'),

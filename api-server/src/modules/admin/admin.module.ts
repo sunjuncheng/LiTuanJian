@@ -8,14 +8,17 @@ import { TaskCheckpoint } from '../../entities/task-checkpoint.entity';
 import { TaskParticipant } from '../../entities/task-participant.entity';
 import { CheckinRecord } from '../../entities/checkin-record.entity';
 import { Team } from '../../entities/team.entity';
+import { TeamMember } from '../../entities/team-member.entity';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
 import { CoachModule } from '../coach/coach.module';
+import { SystemConfigModule } from '../system-config/system-config.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Admin, User, Coach, Task, TaskCheckpoint, TaskParticipant, CheckinRecord, Team]),
+    TypeOrmModule.forFeature([Admin, User, Coach, Task, TaskCheckpoint, TaskParticipant, CheckinRecord, Team, TeamMember]),
     CoachModule,
+    SystemConfigModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

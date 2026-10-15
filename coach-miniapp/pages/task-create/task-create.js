@@ -9,8 +9,10 @@ Page({
       name: '',
       description: '',
       notice: '',
+      coverImage: '',
       deadline: '',
-      acceptMode: 3,
+      acceptMode: 1,
+      minTeamSize: 2,
       needReview: true
     },
     startPoint: {
@@ -48,6 +50,44 @@ Page({
 
   onDeadlineChange(e) {
     this.setData({ 'form.deadline': e.detail.value })
+  },
+
+  uploadCoverImage() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].tempFilePath
+        wx.showLoading({ title: '上传中...' })
+        wx.uploadFile({
+          url: app.globalData.apiBaseUrl + '/upload/image',
+          filePath: tempFilePath,
+          name: 'file',
+          header: {
+            'Authorization': 'Bearer ' + (app.globalData.token || wx.getStorageSync('coach_token'))
+          },
+          success: (uploadRes) => {
+            wx.hideLoading()
+            try {
+              const data = JSON.parse(uploadRes.data)
+              if (data.code === 0) {
+                this.setData({ 'form.coverImage': data.data.url })
+                wx.showToast({ title: '上传成功', icon: 'success' })
+              } else {
+                wx.showToast({ title: data.msg || '上传失败', icon: 'none' })
+              }
+            } catch (err) {
+              wx.showToast({ title: '上传失败', icon: 'none' })
+            }
+          },
+          fail: () => {
+            wx.hideLoading()
+            wx.showToast({ title: '上传失败', icon: 'none' })
+          }
+        })
+      }
+    })
   },
 
   async getCurrentLocation() {

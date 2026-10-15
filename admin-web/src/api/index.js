@@ -22,3 +22,6 @@ export const deleteCoach = (id) => request.delete(`/admin/coaches/${id}`)
 
 export const getSystemConfig = () => request.get('/admin/settings')
 export const updateSystemConfig = (data) => request.put('/admin/settings', data)
+
+export const getTeamList = (params) => request.get('/admin/teams', { params })
+export const deleteTeam = (id) => request.delete(`/admin/teams/${id}`)

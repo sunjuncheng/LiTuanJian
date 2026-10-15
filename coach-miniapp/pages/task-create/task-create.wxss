@@ -2,28 +2,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20rpx 0 30rpx;
+  padding: 24rpx 0 36rpx;
 }
 
 .step {
-  font-size: 22rpx;
+  font-size: 24rpx;
   color: #999;
+  font-weight: 500;
 }
 
 .step.active {
-  color: #2c3e50;
+  color: #FF6B35;
   font-weight: bold;
 }
 
 .step-line {
   width: 60rpx;
   height: 2rpx;
-  background: #e0e0e0;
+  background: #E8E8E8;
   margin: 0 16rpx;
 }
 
 .step-line.active {
-  background: #2c3e50;
+  background: #FF6B35;
 }
 
 .step-content {
@@ -33,17 +34,18 @@
 .radio-label {
   display: flex;
   align-items: center;
-  margin-bottom: 16rpx;
+  margin-bottom: 18rpx;
   font-size: 28rpx;
+  color: #333;
 }
 
 .loc-info {
-  margin-top: 12rpx;
+  margin-top: 14rpx;
   font-size: 24rpx;
-  color: #52c41a;
+  color: #6BCB77;
   display: flex;
   flex-direction: column;
-  gap: 4rpx;
+  gap: 6rpx;
 }
 
 .switch-label {
@@ -53,39 +55,41 @@
 }
 
 .checkpoint-card {
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
+  border: 2rpx solid #FFF0EB;
 }
 
 .cp-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16rpx;
+  margin-bottom: 20rpx;
   padding-bottom: 16rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid #F0F0F0;
 }
 
 .cp-title {
   font-size: 30rpx;
   font-weight: bold;
-  color: #2c3e50;
+  color: #FF6B35;
 }
 
 .remove-btn {
   font-size: 26rpx;
-  color: #f5222d;
+  color: #FF4757;
+  font-weight: 500;
 }
 
 .img-upload {
   width: 100%;
   height: 200rpx;
-  background: #f8f9fa;
-  border: 2rpx dashed #d0d0d0;
+  background: #F8F9FA;
+  border: 2rpx dashed #FFD0B8;
   border-radius: 12rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
+  color: #FF6B35;
   font-size: 26rpx;
 }
 
@@ -96,13 +100,13 @@
 }
 
 .add-btn {
-  margin: 20rpx 0;
+  margin: 24rpx 0;
 }
 
 .step-btns {
   display: flex;
   gap: 20rpx;
-  margin-top: 30rpx;
+  margin-top: 36rpx;
 }
 
 .step-btns button {
@@ -116,4 +120,37 @@
 .final-btns button {
   flex: 1;
   min-width: 200rpx;
+}
+
+.cover-upload {
+  width: 100%;
+  height: 280rpx;
+  background: #F8F9FA;
+  border-radius: 12rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.cover-preview {
+  width: 100%;
+  height: 100%;
+}
+
+.cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  gap: 12rpx;
+}
+
+.cover-icon {
+  font-size: 56rpx;
+}
+
+.cover-text {
+  font-size: 26rpx;
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CheckinRecord } from '../../entities/checkin-record.entity';
 import { TaskCheckpoint } from '../../entities/task-checkpoint.entity';
 import { TaskParticipant } from '../../entities/task-participant.entity';
+import { Task } from '../../entities/task.entity';
 import { isWithinRange } from '../../common/utils/location';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class CheckinService {
     @InjectRepository(CheckinRecord) private checkinRepo: Repository<CheckinRecord>,
     @InjectRepository(TaskCheckpoint) private checkpointRepo: Repository<TaskCheckpoint>,
     @InjectRepository(TaskParticipant) private participantRepo: Repository<TaskParticipant>,
+    @InjectRepository(Task) private taskRepo: Repository<Task>,
   ) {}
 
   async submitCheckin(userId: number, data: any) {
@@ -19,6 +21,13 @@ export class CheckinService {
     const checkpointId = Number(data.checkpointId);
     if (isNaN(taskId) || isNaN(checkpointId)) {
       throw new BadRequestException('参数无效，请重试');
+    }
+
+    const task = await this.taskRepo.findOne({ where: { id: taskId } });
+    if (!task) throw new NotFoundException('任务不存在');
+    const now = new Date();
+    if (task.deadline && new Date(task.deadline) < now) {
+      throw new BadRequestException('任务已过时，无法打卡');
     }
 
     const participant = await this.participantRepo.findOne({

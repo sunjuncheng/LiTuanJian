@@ -1,39 +1,58 @@
 <view class="container">
   <view wx:if="{{!isLoggedIn}}" class="no-team">
+    <view class="empty-icon">🔒</view>
     <view class="empty-tip">请先登录后查看队伍</view>
-    <view class="team-actions">
-      <button class="btn-primary" bindtap="goLogin">去登录</button>
-    </view>
+    <button class="btn-primary" bindtap="goLogin">去登录</button>
   </view>
 
   <view wx:elif="{{!myTeam}}" class="no-team">
+    <view class="empty-icon">👥</view>
     <view class="empty-tip">你还没有加入任何队伍</view>
+    <view class="empty-sub">创建队伍或输入邀请码加入</view>
     <view class="team-actions">
-      <button class="btn-primary" bindtap="createTeam">创建队伍</button>
-      <button class="btn-outline" bindtap="joinTeam">加入队伍</button>
+      <button class="btn-primary" bindtap="createTeam" loading="{{creating}}" disabled="{{creating}}">创建队伍</button>
+      <button class="btn-outline" bindtap="joinTeam" loading="{{joining}}" disabled="{{joining}}">加入队伍</button>
     </view>
   </view>
 
   <view wx:if="{{myTeam}}" class="team-info card">
     <view class="team-header">
-      <text class="team-name">{{myTeam.name}}</text>
-      <text class="tag tag-blue">队长：{{myTeam.leaderName}}</text>
+      <view class="team-avatar">👥</view>
+      <view class="team-meta">
+        <text class="team-name">{{myTeam.name}}</text>
+        <text class="team-leader">队长：{{myTeam.leaderName}}</text>
+      </view>
+      <text class="member-count-badge">{{myTeam.memberCount}}人</text>
     </view>
+
     <view class="invite-section">
-      <text class="invite-label">队伍邀请码：</text>
-      <text class="invite-code">{{myTeam.inviteCode}}</text>
-      <text class="copy-btn" bindtap="copyCode">复制</text>
+      <text class="invite-label">队伍邀请码</text>
+      <view class="invite-row">
+        <text class="invite-code">{{myTeam.inviteCode}}</text>
+        <view class="copy-btn" bindtap="copyCode">复制</view>
+      </view>
+      <text class="invite-tip" wx:if="{{myTeam.hasActiveTask}}">⚠️ 队伍有进行中的任务，暂不允许新成员加入</text>
+      <text class="invite-tip" wx:else>把邀请码分享给好友，一起组队完成任务</text>
     </view>
-    <view class="member-count">队伍成员：{{myTeam.memberCount}} 人</view>
-    <view class="member-list">
-      <view class="member-item" wx:for="{{myTeam.members}}" wx:key="id">
-        <image class="avatar" src="{{item.avatarUrl}}"></image>
-        <text class="member-name">{{item.nickname}}</text>
-        <text class="tag tag-orange" wx:if="{{item.isLeader}}">队长</text>
+
+    <view class="member-section">
+      <view class="member-title">队伍成员 ({{myTeam.memberCount}})</view>
+      <view class="member-list">
+        <view class="member-item" wx:for="{{myTeam.members}}" wx:key="id">
+          <image class="member-avatar" src="{{item.avatarUrl || defaultAvatar}}" mode="aspectFill"></image>
+          <view class="member-info">
+            <text class="member-name">{{item.nickname}}</text>
+            <text class="member-role" wx:if="{{item.isLeader}}">队长</text>
+            <text class="member-role" wx:else>队员</text>
+          </view>
+          <text class="leader-badge" wx:if="{{item.isLeader}}">👑</text>
+          <view class="remove-btn" wx:if="{{myTeam.isLeader && !item.isLeader}}" data-user-id="{{item.id}}" data-nickname="{{item.nickname}}" bindtap="removeMember">移除</view>
+        </view>
       </view>
     </view>
+
     <view class="team-footer">
-      <button class="btn-outline" bindtap="leaveTeam">退出队伍</button>
+      <button class="btn-outline" bindtap="leaveTeam">{{myTeam.isLeader ? '解散队伍' : '退出队伍'}}</button>
     </view>
   </view>
 </view>

@@ -9,7 +9,7 @@
         <div class="logo-icon">
           <el-icon :size="40"><Trophy /></el-icon>
         </div>
-        <h1>团建打卡</h1>
+        <h1>{{ userStore.systemName }}</h1>
         <p>运动管理后台</p>
       </div>
 
@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
@@ -40,6 +40,10 @@ const router = useRouter()
 const userStore = useUserStore()
 const formRef = ref(null)
 const loading = ref(false)
+
+onMounted(() => {
+  userStore.loadSystemName()
+})
 
 const form = reactive({
   username: '',

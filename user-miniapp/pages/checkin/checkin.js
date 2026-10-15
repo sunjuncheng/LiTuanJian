@@ -1,5 +1,6 @@
 const { get, post } = require('../../utils/request.js')
 const location = require('../../utils/location.js')
+const { DEFAULT_IMAGE } = require('../../utils/default-images.js')
 
 Page({
   data: {
@@ -8,18 +9,23 @@ Page({
     currentIndex: 0,
     photoPath: '',
     remark: '',
-    submitting: false
+    submitting: false,
+    isEnded: false,
+    defaultImage: DEFAULT_IMAGE
   },
 
   onLoad(options) {
     this.setData({ taskId: options.taskId })
-    this.loadCheckpoints()
+    this.loadTaskAndCheckpoints()
   },
 
-  async loadCheckpoints() {
+  async loadTaskAndCheckpoints() {
     try {
-      const checkpoints = await get('/tasks/' + this.data.taskId + '/checkpoints')
-      this.setData({ checkpoints })
+      const [task, checkpoints] = await Promise.all([
+        get('/tasks/' + this.data.taskId),
+        get('/tasks/' + this.data.taskId + '/checkpoints')
+      ])
+      this.setData({ checkpoints, isEnded: !!(task && task.isEnded) })
     } catch (e) {
       console.error(e)
     }
@@ -47,6 +53,10 @@ Page({
   },
 
   async submitCheckin() {
+    if (this.data.isEnded) {
+      wx.showToast({ title: '任务已过时，无法打卡', icon: 'none' })
+      return
+    }
     if (!this.data.photoPath) {
       wx.showToast({ title: '请先拍照', icon: 'none' })
       return
@@ -78,14 +88,48 @@ Page({
         latitude: loc.latitude,
         longitude: loc.longitude,
         accuracy: loc.accuracy
-      })
+      }, { silent: true })
       wx.hideLoading()
       wx.showToast({ title: '提交成功，待审核', icon: 'success' })
-      this.setData({ photoPath: '', remark: '', submitting: false })
-      this.loadCheckpoints()
+
+      const nextIndex = this.findNextPendingCheckpoint()
+      if (nextIndex >= 0) {
+        setTimeout(() => {
+          this.setData({
+            currentIndex: nextIndex,
+            photoPath: '',
+            remark: '',
+            submitting: false
+          })
+          this.loadTaskAndCheckpoints()
+        }, 1000)
+      } else {
+        setTimeout(() => {
+          wx.showToast({ title: '全部打卡完成', icon: 'success' })
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 1000)
+        }, 800)
+      }
     } catch (e) {
       wx.hideLoading()
       this.setData({ submitting: false })
     }
+  },
+
+  findNextPendingCheckpoint() {
+    const list = this.data.checkpoints
+    const current = this.data.currentIndex
+    for (let i = current + 1; i < list.length; i++) {
+      if (list[i].status !== 'passed' && list[i].status !== 'reviewing') {
+        return i
+      }
+    }
+    for (let i = 0; i < current; i++) {
+      if (list[i].status !== 'passed' && list[i].status !== 'reviewing') {
+        return i
+      }
+    }
+    return -1
   }
 })

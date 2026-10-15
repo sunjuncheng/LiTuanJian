@@ -9,6 +9,8 @@ import { TaskCheckpoint } from '../../entities/task-checkpoint.entity';
 import { TaskParticipant } from '../../entities/task-participant.entity';
 import { CheckinRecord } from '../../entities/checkin-record.entity';
 import { Team } from '../../entities/team.entity';
+import { TeamMember } from '../../entities/team-member.entity';
+import { SystemConfigService } from '../system-config/system-config.service';
 
 @Injectable()
 export class AdminService {
@@ -20,6 +22,8 @@ export class AdminService {
     @InjectRepository(TaskParticipant) private participantRepo: Repository<TaskParticipant>,
     @InjectRepository(CheckinRecord) private checkinRepo: Repository<CheckinRecord>,
     @InjectRepository(Team) private teamRepo: Repository<Team>,
+    @InjectRepository(TeamMember) private memberRepo: Repository<TeamMember>,
+    private configService: SystemConfigService,
   ) {}
 
   async getDashboardStats() {
@@ -231,7 +235,15 @@ export class AdminService {
 
   private fixImageUrl(url: string | null | undefined): string {
     if (!url) return '';
-    return url.replace(':3000', '');
+    const baseUrl = process.env.BASE_URL || 'http://123.56.72.218';
+    const match = url.match(/(\/uploads\/.+)$/);
+    if (match) {
+      return baseUrl + match[1];
+    }
+    if (url.startsWith('/uploads/')) {
+      return baseUrl + url;
+    }
+    return url;
   }
 
   async deleteTask(id: number) {
@@ -253,19 +265,11 @@ export class AdminService {
   }
 
   getSystemConfig() {
-    return {
-      systemName: '团建打卡管理系统',
-      userWxAppId: process.env.WX_USER_APPID || '',
-      userWxAppSecret: process.env.WX_USER_SECRET || '',
-      coachWxAppId: process.env.WX_COACH_APPID || '',
-      coachWxAppSecret: process.env.WX_COACH_SECRET || '',
-      uploadSizeLimit: 10,
-      defaultLocationRange: 50,
-    };
+    return this.configService.getConfig();
   }
 
-  updateSystemConfig(data: any) {
-    return { ...data, updated: true };
+  async updateSystemConfig(data: any) {
+    return this.configService.updateConfig(data);
   }
 
   async getPendingCheckins(taskId: number) {
@@ -286,5 +290,50 @@ export class AdminService {
     checkin.rejectReason = rejectReason || null;
     checkin.reviewTime = new Date();
     return this.checkinRepo.save(checkin);
+  }
+
+  async getTeamList(params: { page: number; pageSize: number; keyword?: string }) {
+    const { page, pageSize, keyword } = params;
+    const where: any = {};
+    if (keyword) {
+      where.name = keyword;
+    }
+    const [teams, total] = await this.teamRepo.findAndCount({
+      where,
+      order: { createdAt: 'DESC' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+
+    const result = [];
+    for (const team of teams) {
+      const members = await this.memberRepo.find({ where: { teamId: team.id } });
+      const memberDetails = [];
+      for (const m of members) {
+        const user = await this.userRepo.findOne({ where: { id: m.userId } });
+        memberDetails.push({
+          id: m.userId,
+          nickname: user?.nickname || '用户' + m.userId,
+          phone: user?.phone || '',
+          avatarUrl: this.fixImageUrl(user?.avatarUrl || ''),
+          isLeader: m.isLeader,
+        });
+      }
+      const leader = memberDetails.find((m) => m.isLeader);
+      result.push({
+        ...team,
+        memberCount: members.length,
+        leaderName: leader?.nickname || '',
+        leaderPhone: leader?.phone || '',
+        members: memberDetails,
+      });
+    }
+    return { list: result, total, page, pageSize };
+  }
+
+  async deleteTeam(teamId: number) {
+    await this.memberRepo.delete({ teamId });
+    await this.teamRepo.delete({ id: teamId });
+    return { success: true };
   }
 }

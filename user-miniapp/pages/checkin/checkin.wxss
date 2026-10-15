@@ -20,8 +20,9 @@
 }
 
 .tab-item.active {
-  background: #4A90D9;
-  border-color: #4A90D9;
+  background: linear-gradient(135deg, #FF6B35, #FF4757);
+  border-color: transparent;
+  box-shadow: 0 4rpx 12rpx rgba(255, 71, 87, 0.3);
 }
 
 .tab-item.active .tab-num {
@@ -52,13 +53,13 @@
 
 .cp-name {
   font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+  font-weight: 700;
+  color: #1A1A1A;
 }
 
 .cp-location {
   font-size: 26rpx;
-  color: #888;
+  color: #999;
   margin-bottom: 20rpx;
 }
 
@@ -66,6 +67,7 @@
   font-size: 26rpx;
   color: #666;
   margin-bottom: 12rpx;
+  font-weight: 500;
 }
 
 .reference-section {
@@ -91,8 +93,8 @@
 .photo-upload {
   width: 100%;
   height: 360rpx;
-  background: #f8f9fa;
-  border: 2rpx dashed #d0d0d0;
+  background: #F8F9FB;
+  border: 2rpx dashed #FF6B35;
   border-radius: 12rpx;
   display: flex;
   flex-direction: column;
@@ -107,7 +109,8 @@
 
 .upload-text {
   font-size: 26rpx;
-  color: #999;
+  color: #FF6B35;
+  font-weight: 500;
 }
 
 .uploaded-photo {
@@ -124,7 +127,7 @@
   width: 100%;
   min-height: 120rpx;
   padding: 16rpx;
-  background: #f8f9fa;
+  background: #F8F9FB;
   border-radius: 12rpx;
   font-size: 26rpx;
   box-sizing: border-box;
@@ -132,20 +135,20 @@
 
 .reject-reason {
   padding: 16rpx;
-  background: #fff1f0;
+  background: #FFF1EC;
   border-radius: 8rpx;
   margin-top: 16rpx;
 }
 
 .reject-label {
   font-size: 24rpx;
-  color: #f5222d;
+  color: #FF4757;
   font-weight: bold;
 }
 
 .reject-text {
   font-size: 24rpx;
-  color: #f5222d;
+  color: #FF4757;
 }
 
 .submit-bar {

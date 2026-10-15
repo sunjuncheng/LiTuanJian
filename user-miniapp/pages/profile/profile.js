@@ -1,4 +1,5 @@
 const auth = require('../../utils/auth.js')
+const { DEFAULT_AVATAR } = require('../../utils/default-images.js')
 const app = getApp()
 
 Page({
@@ -10,10 +11,14 @@ Page({
     phone: '',
     password: '',
     nickname: '',
-    loading: false
+    loading: false,
+    defaultAvatar: DEFAULT_AVATAR
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 })
+    }
     this.loadUserInfo()
   },
 
@@ -116,5 +121,17 @@ Page({
 
   goMyTasks() {
     wx.switchTab({ url: '/pages/index/index' })
+  },
+
+  goEditProfile() {
+    wx.navigateTo({ url: '/pages/profile-edit/profile-edit' })
+  },
+
+  goRecords() {
+    wx.navigateTo({ url: '/pages/records/records' })
+  },
+
+  goSettings() {
+    wx.navigateTo({ url: '/pages/settings/settings' })
   }
 })

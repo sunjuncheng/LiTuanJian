@@ -5,6 +5,11 @@ const auth = {
     return app.globalData.userInfo || wx.getStorageSync('userInfo')
   },
 
+  setUserInfo(userInfo) {
+    app.globalData.userInfo = userInfo
+    wx.setStorageSync('userInfo', userInfo)
+  },
+
   getToken() {
     return app.globalData.token || wx.getStorageSync('token')
   },

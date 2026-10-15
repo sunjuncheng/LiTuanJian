@@ -6,7 +6,7 @@
           <el-icon :size="28"><Trophy /></el-icon>
         </div>
         <div class="logo-text">
-          <div class="logo-title">团建打卡</div>
+          <div class="logo-title">{{ userStore.systemName }}</div>
           <div class="logo-subtitle">运动管理后台</div>
         </div>
       </div>
@@ -56,13 +56,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/store'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+
+onMounted(() => {
+  userStore.loadSystemName()
+})
 
 const adminInfo = computed(() => userStore.adminInfo)
 

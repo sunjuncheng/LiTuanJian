@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body, Req } from '@nestjs/common';
+import { Controller, Get, Put, Post, Body, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -13,5 +13,10 @@ export class UserController {
   @Put('profile')
   updateProfile(@Req() req, @Body() body) {
     return this.userService.updateProfile(req.user.id, body);
+  }
+
+  @Post('change-password')
+  changePassword(@Req() req, @Body() body) {
+    return this.userService.changePassword(req.user.id, body.oldPassword, body.newPassword);
   }
 }

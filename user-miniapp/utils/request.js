@@ -13,20 +13,25 @@ const request = (options) => {
       },
       success: (res) => {
         const silent = options.silent
-        if (res.statusCode === 200) {
-          if (res.data.code === 0) {
-            resolve(res.data.data)
-          } else if (res.data.code === 401) {
-            wx.removeStorageSync('token')
-            wx.removeStorageSync('userInfo')
-            app.globalData.token = ''
-            app.globalData.userInfo = null
-            reject(res.data)
-          } else {
-            if (!silent) {
-              wx.showToast({ title: res.data.msg || '请求失败', icon: 'none' })
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          const body = res.data
+          if (body && typeof body === 'object' && body.code !== undefined) {
+            if (body.code === 0) {
+              resolve(body.data)
+            } else if (body.code === 401) {
+              wx.removeStorageSync('token')
+              wx.removeStorageSync('userInfo')
+              app.globalData.token = ''
+              app.globalData.userInfo = null
+              reject(body)
+            } else {
+              if (!silent) {
+                wx.showToast({ title: body.msg || '请求失败', icon: 'none' })
+              }
+              reject(body)
             }
-            reject(res.data)
+          } else {
+            resolve(body)
           }
         } else if (res.statusCode === 401) {
           wx.removeStorageSync('token')
@@ -35,7 +40,8 @@ const request = (options) => {
           app.globalData.userInfo = null
           reject(res)
         } else {
-          const errMsg = (res.data && res.data.msg) || (res.data && res.data.message) || '网络请求失败(' + res.statusCode + ')'
+          const body = res.data
+          const errMsg = (body && body.msg) || (body && body.message) || '网络请求失败(' + res.statusCode + ')'
           if (!silent) {
             wx.showToast({ title: errMsg, icon: 'none' })
           }

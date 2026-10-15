@@ -29,6 +29,16 @@ export class TaskController {
     return this.taskService.acceptTask(id, req.user.id, body.mode, body.teamId);
   }
 
+  @Post('tasks/:id/cancel')
+  cancelAccept(@Param('id') id: number, @Req() req) {
+    return this.taskService.cancelAccept(id, req.user.id);
+  }
+
+  @Post('tasks/:id/giveup')
+  giveUpTeamTask(@Param('id') id: number, @Req() req) {
+    return this.taskService.giveUpTeamTask(id, req.user.id);
+  }
+
   @Post('tasks/:id/unlock')
   unlockTask(@Param('id') id: number, @Body() body, @Req() req) {
     return this.taskService.unlockTask(id, req.user.id, body);

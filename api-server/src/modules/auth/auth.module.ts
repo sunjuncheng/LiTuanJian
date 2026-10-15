@@ -9,10 +9,12 @@ import { APP_GUARD } from '@nestjs/core';
 import { User } from '../../entities/user.entity';
 import { Coach } from '../../entities/coach.entity';
 import { Admin } from '../../entities/admin.entity';
+import { SystemConfigModule } from '../system-config/system-config.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Coach, Admin]),
+    SystemConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
