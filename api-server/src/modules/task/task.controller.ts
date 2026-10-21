@@ -91,7 +91,7 @@ export class TaskController {
 
   @Post('coach/tasks/:id/remind')
   remindParticipant(@Param('id') id: number, @Body() body) {
-    return { success: true, message: '提醒已发送' };
+    return this.taskService.remindParticipant(id, body.participantId);
   }
 
   @Get('coach/review/checkpoints')
@@ -102,13 +102,18 @@ export class TaskController {
     );
   }
 
+  @Get('coach/review/messages')
+  getCoachReviewMessages(@Req() req, @Query() query) {
+    return this.taskService.getCoachReviewMessages(req.user.id, query.status);
+  }
+
   @Post('coach/review/approve')
-  approveCheckin(@Body() body) {
-    return this.taskService.reviewCheckin(body, 'passed');
+  approveCheckin(@Body() body, @Req() req) {
+    return this.taskService.reviewCheckin(body, 'passed', req.user.id);
   }
 
   @Post('coach/review/reject')
-  rejectCheckin(@Body() body) {
-    return this.taskService.reviewCheckin(body, 'rejected');
+  rejectCheckin(@Body() body, @Req() req) {
+    return this.taskService.reviewCheckin(body, 'rejected', req.user.id);
   }
 }

@@ -6,6 +6,7 @@ import { TaskCheckpoint } from '../../entities/task-checkpoint.entity';
 import { TaskParticipant } from '../../entities/task-participant.entity';
 import { CheckinRecord } from '../../entities/checkin-record.entity';
 import { User } from '../../entities/user.entity';
+import { UserMessage } from '../../entities/user-message.entity';
 import { TeamMember } from '../../entities/team-member.entity';
 import { isWithinRange } from '../../common/utils/location';
 import { SystemConfigService } from '../system-config/system-config.service';
@@ -18,6 +19,7 @@ export class TaskService {
     @InjectRepository(TaskParticipant) private participantRepo: Repository<TaskParticipant>,
     @InjectRepository(CheckinRecord) private checkinRepo: Repository<CheckinRecord>,
     @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(UserMessage) private messageRepo: Repository<UserMessage>,
     @InjectRepository(TeamMember) private memberRepo: Repository<TeamMember>,
     private configService: SystemConfigService,
   ) {}
@@ -453,7 +455,88 @@ export class TaskService {
     });
   }
 
-  async reviewCheckin(body: any, status: string) {
+  async getCoachReviewMessages(coachId: number, filterStatus?: string) {
+    const tasks = await this.taskRepo.find({
+      where: { coachId },
+      order: { createdAt: 'DESC' },
+    });
+    const taskIds = tasks.map((item) => item.id);
+    if (!taskIds.length) {
+      return {
+        pendingCount: 0,
+        reviewedCount: 0,
+        list: [],
+      };
+    }
+
+    const [allCheckins, checkpoints, participants] = await Promise.all([
+      this.checkinRepo.find({ where: taskIds.map((taskId) => ({ taskId })) }),
+      this.checkpointRepo.find({ where: taskIds.map((taskId) => ({ taskId })) }),
+      this.participantRepo.find({ where: taskIds.map((taskId) => ({ taskId })) }),
+    ]);
+
+    const userIds = [...new Set(participants.map((item) => item.userId))];
+    const users = userIds.length
+      ? await this.userRepo.find({ where: userIds.map((id) => ({ id })) })
+      : [];
+
+    const taskMap = new Map(tasks.map((item) => [item.id, item]));
+    const checkpointMap = new Map(checkpoints.map((item) => [item.id, item]));
+    const participantMap = new Map(participants.map((item) => [item.id, item]));
+    const userMap = new Map(users.map((item) => [item.id, item]));
+
+    const pendingCount = allCheckins.filter((item) => item.status === 'reviewing').length;
+    const reviewedCount = allCheckins.filter((item) => item.status === 'passed' || item.status === 'rejected').length;
+
+    const list = allCheckins
+      .filter((item) => {
+        if (filterStatus === 'reviewed') {
+          return item.status === 'passed' || item.status === 'rejected';
+        }
+        return item.status === 'reviewing';
+      })
+      .sort((a, b) => {
+        const timeA = filterStatus === 'reviewed'
+          ? new Date(a.reviewTime || a.updatedAt || a.createdAt).getTime()
+          : new Date(a.createdAt).getTime();
+        const timeB = filterStatus === 'reviewed'
+          ? new Date(b.reviewTime || b.updatedAt || b.createdAt).getTime()
+          : new Date(b.createdAt).getTime();
+        return timeB - timeA;
+      })
+      .map((item) => {
+        const task = taskMap.get(item.taskId);
+        const checkpoint = checkpointMap.get(item.checkpointId);
+        const participant = participantMap.get(item.participantId);
+        const user = participant ? userMap.get(participant.userId) : null;
+        return {
+          id: item.id,
+          taskId: item.taskId,
+          participantId: item.participantId,
+          checkpointId: item.checkpointId,
+          taskName: task?.name || '未知任务',
+          checkpointName: checkpoint?.name || '未知打卡点',
+          participantName: user?.nickname || '未知用户',
+          participantAvatar: this.fixImageUrl(user?.avatarUrl || ''),
+          participantType: participant?.participantType || 'solo',
+          participantTypeText: participant?.participantType === 'team' ? '团队成员' : '个人用户',
+          status: item.status,
+          statusText: item.status === 'passed' ? '已通过' : (item.status === 'rejected' ? '已驳回' : '待审核'),
+          submitTime: item.createdAt,
+          reviewTime: item.reviewTime,
+          rejectReason: item.rejectReason,
+          userPhoto: this.fixImageUrl(item.photoUrl),
+        };
+      });
+
+    return {
+      pendingCount,
+      reviewedCount,
+      list,
+    };
+  }
+
+  async reviewCheckin(body: any, status: string, reviewerId?: number) {
     const taskId = Number(body.taskId);
     const checkpointId = Number(body.checkpointId);
     const participantId = Number(body.participantId);
@@ -472,8 +555,11 @@ export class TaskService {
 
     checkin.status = status;
     checkin.reviewTime = new Date();
+    checkin.reviewerId = reviewerId || null;
     if (status === 'rejected') {
       checkin.rejectReason = body.reason;
+    } else {
+      checkin.rejectReason = null;
     }
     return this.checkinRepo.save(checkin);
   }
@@ -532,5 +618,49 @@ export class TaskService {
     participant.unlockTime = new Date();
     return this.participantRepo.save(participant);
   }
-}
 
+  async remindParticipant(taskId: number, targetId: number) {
+    const id = Number(taskId);
+    const target = Number(targetId);
+    if (isNaN(id) || isNaN(target)) throw new BadRequestException('参数无效');
+
+    const task = await this.taskRepo.findOne({ where: { id } });
+    if (!task) throw new NotFoundException('任务不存在');
+
+    const singleParticipant = await this.participantRepo.findOne({
+      where: { id: target, taskId: id },
+    });
+
+    let recipients: number[] = [];
+    if (singleParticipant) {
+      recipients = [singleParticipant.userId];
+    } else {
+      const teamParticipants = await this.participantRepo.find({
+        where: { taskId: id, teamId: target, participantType: 'team' },
+      });
+      recipients = [...new Set(teamParticipants.map((item) => item.userId).filter(Boolean))];
+    }
+
+    if (!recipients.length) {
+      throw new NotFoundException('未找到提醒对象');
+    }
+
+    const messages = recipients.map((userId) =>
+      this.messageRepo.create({
+        userId,
+        type: 'task_reminder',
+        title: '任务提醒',
+        content: `教练提醒你关注任务「${task.name}」，请及时查看任务详情并完成后续打卡。`,
+        taskId: id,
+        isRead: false,
+      }),
+    );
+    await this.messageRepo.save(messages);
+
+    return {
+      success: true,
+      message: '提醒已发送',
+      recipientCount: recipients.length,
+    };
+  }
+}

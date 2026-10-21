@@ -1,53 +1,96 @@
 <view class="container" wx:if="{{task}}">
   <view class="task-header card">
     <view class="task-cover">
-      <image class="cover-img" src="{{task.coverImage || defaultImage}}" mode="aspectFill"></image>
+      <image class="cover-img" src="{{task.coverImage || defaultCover}}" mode="aspectFill"></image>
       <view class="cover-mask"></view>
       <view class="task-title-overlay">{{task.name}}</view>
     </view>
     <view class="task-tags">
       <text class="tag {{task.isEnded ? 'tag-gray' : 'tag-green'}}">{{task.statusText}}</text>
-      <text class="tag tag-orange">{{acceptModeText}}</text>
-      <text class="tag tag-blue">{{task.needReview ? '需人工审核' : '自动审核'}}</text>
+      <text class="tag tag-orange">{{task.acceptModeText}}</text>
+      <text class="tag tag-blue">{{task.reviewModeText}}</text>
+    </view>
+  </view>
+
+  <view class="task-info card">
+    <view class="task-meta">
+      <text>📍 {{task.checkpointCount}} 个打卡点</text>
+      <text>👥 {{task.participantCount || 0}} 人参与</text>
+      <text>⏰ {{task.deadlineText}}</text>
     </view>
   </view>
 
   <view class="section card">
-    <view class="section-title">📝 任务简介</view>
-    <view class="section-content">{{task.description}}</view>
+    <view class="section-title">任务说明</view>
+    <view class="section-content">{{task.description || '暂未填写任务说明'}}</view>
   </view>
 
   <view class="section card" wx:if="{{task.notice}}">
-    <view class="section-title">📋 活动须知</view>
+    <view class="section-title">活动须知</view>
     <view class="section-content">{{task.notice}}</view>
   </view>
 
   <view class="section card">
-    <view class="section-title">📍 启动点位</view>
-    <view class="point-info">
-      <text class="point-name">{{task.startPoint.name}}</text>
-      <text class="point-range">允许误差：{{task.startPoint.range}}米</text>
-    </view>
-  </view>
-
-  <view class="section card">
-    <view class="section-title">🎯 打卡站点 ({{task.checkpoints.length}})</view>
-    <view class="checkpoint-list">
-      <view class="checkpoint-item" wx:for="{{task.checkpoints}}" wx:key="id">
-        <view class="cp-index">
-          <text class="cp-num">{{index + 1}}</text>
-        </view>
-        <view class="cp-content">
-          <view class="cp-name">{{item.name}}</view>
-          <view class="cp-location" wx:if="{{item.location}}">📍 {{item.location}}</view>
-          <image class="reference-img" src="{{item.referenceImage || defaultImage}}" mode="aspectFill" wx:if="{{item.referenceImage}}"></image>
-        </view>
+    <view class="section-title">启动点信息</view>
+    <view class="info-grid">
+      <view class="info-item">
+        <text class="info-label">点位名称</text>
+        <text class="info-value">{{task.startPoint.name}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">允许误差</text>
+        <text class="info-value">{{task.startPoint.rangeText}}</text>
+      </view>
+      <view class="info-item full">
+        <text class="info-label">坐标位置</text>
+        <text class="info-value">{{task.startPoint.coordinateText}}</text>
       </view>
     </view>
   </view>
 
+  <view class="section card">
+    <view class="section-title">打卡点详情 ({{task.checkpoints.length}})</view>
+    <view class="checkpoint-list" wx:if="{{task.checkpoints.length}}">
+      <view class="checkpoint-card" wx:for="{{task.checkpoints}}" wx:key="id">
+        <view class="checkpoint-head">
+          <view class="checkpoint-badge">{{index + 1}}</view>
+          <view class="checkpoint-head-main">
+            <text class="checkpoint-name">{{item.name || item.sortLabel}}</text>
+            <text class="checkpoint-subtitle">{{item.sortLabel}}</text>
+          </view>
+        </view>
+        <view class="info-grid compact">
+          <view class="info-item">
+            <text class="info-label">打卡范围</text>
+            <text class="info-value">{{item.rangeText}}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">拍照要求</text>
+            <text class="info-value">{{item.photoRuleText}}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">备注规则</text>
+            <text class="info-value">{{item.remarkRuleText}}</text>
+          </view>
+          <view class="info-item full">
+            <text class="info-label">坐标位置</text>
+            <text class="info-value">{{item.coordinateText}}</text>
+          </view>
+        </view>
+        <view class="reference-block">
+          <view class="reference-header">
+            <text class="info-label">官方参照图</text>
+            <text class="reference-tip">{{item.hasReferenceImage ? '已上传参照图' : '未上传参照图，显示默认占位图'}}</text>
+          </view>
+          <image class="reference-img" src="{{item.referenceImage || defaultImage}}" mode="aspectFill"></image>
+        </view>
+      </view>
+    </view>
+    <view class="empty-checkpoint" wx:else>暂未配置打卡点</view>
+  </view>
+
   <view class="section card" wx:if="{{myProgress}}">
-    <view class="section-title">📊 我的进度</view>
+    <view class="section-title">我的进度</view>
     <view class="progress-bar">
       <view class="progress-fill" style="width: {{myProgress.percentage}}%"></view>
     </view>

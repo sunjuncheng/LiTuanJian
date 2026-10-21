@@ -1,28 +1,62 @@
 <view class="container">
   <view class="page-header">
-    <text class="page-title">✅ 打卡审核</text>
-    <text class="page-subtitle">审核用户打卡照片</text>
+    <text class="page-title">审核消息</text>
+    <text class="page-subtitle">查看用户最新提交的审核消息</text>
   </view>
 
-  <view wx:if="{{taskList.length === 0 && !loading}}" class="empty">
-    <view class="empty-icon">📋</view>
-    <text>暂无待审核任务</text>
+  <view class="tabs">
+    <view class="tab {{activeTab === 'pending' ? 'active' : ''}}" data-tab="pending" bindtap="switchTab">
+      未审核 ({{pendingCount}})
+    </view>
+    <view class="tab {{activeTab === 'reviewed' ? 'active' : ''}}" data-tab="reviewed" bindtap="switchTab">
+      已审核 ({{reviewedCount}})
+    </view>
   </view>
 
-  <view wx:for="{{taskList}}" wx:key="id" class="task-card card" bindtap="goDetail" data-id="{{item.id}}">
-    <view class="task-header">
-      <text class="task-title">{{item.name}}</text>
-      <text class="tag {{item.status === 'published' ? 'tag-green' : 'tag-gray'}}">
-        {{item.status === 'published' ? '已发布' : '草稿'}}
-      </text>
+  <view wx:if="{{messageList.length === 0 && !loading}}" class="empty">
+    <view class="empty-icon">{{activeTab === 'pending' ? '📝' : '✅'}}</view>
+    <text>{{activeTab === 'pending' ? '暂无待审核消息' : '暂无已审核消息'}}</text>
+  </view>
+
+  <view
+    wx:for="{{messageList}}"
+    wx:key="id"
+    class="message-card card"
+    bindtap="goDetail"
+    data-task-id="{{item.taskId}}"
+    data-participant-id="{{item.participantId}}"
+    data-checkpoint-id="{{item.checkpointId}}"
+  >
+    <view class="message-head">
+      <image class="avatar" src="{{item.participantAvatar || defaultAvatar}}" mode="aspectFill"></image>
+      <view class="message-main">
+        <view class="title-row">
+          <text class="message-title">{{item.participantName}}</text>
+          <text class="tag {{item.status === 'passed' ? 'tag-green' : item.status === 'rejected' ? 'tag-red' : 'tag-orange'}}">
+            {{item.statusText}}
+          </text>
+        </view>
+        <text class="message-subtitle">{{item.participantTypeText}} · {{item.taskName}}</text>
+      </view>
     </view>
-    <text class="task-desc">{{item.description}}</text>
-    <view class="task-meta">
-      <text class="meta-item">📍 {{item.checkpointCount || 0}} 个打卡点</text>
-      <text class="meta-item">👥 {{item.participantCount || 0}} 人参与</text>
+
+    <view class="message-body">
+      <view class="meta-line">
+        <text class="meta-label">审核点位</text>
+        <text class="meta-value">{{item.checkpointName}}</text>
+      </view>
+      <view class="meta-line">
+        <text class="meta-label">{{item.timeLabel}}</text>
+        <text class="meta-value">{{item.timeText || '刚刚'}}</text>
+      </view>
+      <view class="meta-line" wx:if="{{item.rejectReason}}">
+        <text class="meta-label">驳回原因</text>
+        <text class="meta-value reject-text">{{item.rejectReason}}</text>
+      </view>
     </view>
+
     <view class="task-footer">
-      <text class="review-link">查看并审核 ›</text>
+      <text class="review-link">{{activeTab === 'pending' ? '前往审核 ›' : '查看审核记录 ›'}}</text>
     </view>
   </view>
 

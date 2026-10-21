@@ -1,8 +1,8 @@
 <view class="container">
   <view class="page-header">
     <view>
-      <text class="page-title">🏃 任务管理</text>
-      <text class="page-subtitle">创建并管理团建打卡任务</text>
+      <text class="page-title">教练任务中心</text>
+      <text class="page-subtitle">创建、发布并跟进每一场团建打卡任务</text>
     </view>
     <button class="create-btn" bindtap="goCreate">+ 新建</button>
   </view>
@@ -18,19 +18,26 @@
       wx:for="{{taskList}}"
       wx:key="id"
     >
-      <view class="task-header" data-id="{{item.id}}" bindtap="goDetail">
-        <text class="task-name">{{item.name}}</text>
-        <text class="tag {{item.status === 'published' ? 'tag-green' : 'tag-gray'}}">
-          {{item.status === 'published' ? '已发布' : '草稿'}}
-        </text>
+      <view class="task-cover" data-id="{{item.id}}" bindtap="goDetail">
+        <image class="cover-img" src="{{item.coverImage || defaultCover}}" mode="aspectFill"></image>
+        <view class="cover-mask"></view>
+        <view class="task-name-overlay">{{item.name}}</view>
       </view>
-      <view class="task-meta" data-id="{{item.id}}" bindtap="goDetail">
+      <view class="task-body" data-id="{{item.id}}" bindtap="goDetail">
+        <view class="mode-tags">
+          <text class="tag {{item.acceptMode === 2 ? 'tag-blue' : 'tag-orange'}}">{{item.acceptMode === 2 ? '仅团队接单' : '仅个人接单'}}</text>
+          <text class="tag {{item.status === 'published' ? 'tag-green' : 'tag-gray'}}">
+            {{item.status === 'published' ? '已发布' : '草稿'}}
+          </text>
+        </view>
+        <view class="task-meta">
         <text class="meta-item">📍 {{item.checkpointCount}} 个打卡点</text>
         <text class="meta-item">👥 {{item.participantCount}} 人参与</text>
-      </view>
-      <view class="task-actions">
-        <view class="action-link" data-id="{{item.id}}" bindtap="goDetail">查看详情</view>
-        <view class="action-link danger" data-id="{{item.id}}" bindtap="deleteTask">删除</view>
+        </view>
+        <view class="task-actions">
+          <view class="action-link" data-id="{{item.id}}" bindtap="goDetail">查看详情</view>
+          <view class="action-link danger" data-id="{{item.id}}" bindtap="deleteTask">删除</view>
+        </view>
       </view>
     </view>
   </view>

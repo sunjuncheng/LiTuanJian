@@ -1,0 +1,160 @@
+.chat-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 71, 87, 0.08));
+}
+
+.live-entry {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(99, 102, 241, 0.08));
+}
+
+.chat-entry-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.chat-entry-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.chat-entry-desc {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.chat-entry-arrow {
+  font-size: 24rpx;
+  color: #FF6B35;
+  font-weight: 600;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF4757 100%);
+  color: #fff;
+}
+
+.summary-title {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.summary-num {
+  font-size: 52rpx;
+  font-weight: 700;
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.message-card {
+  border: 2rpx solid transparent;
+}
+
+.message-card.unread {
+  border-color: #FFE0D4;
+}
+
+.message-card.read {
+  opacity: 0.88;
+}
+
+.message-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-bottom: 14rpx;
+}
+
+.message-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-type {
+  display: inline-block;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  background: #FFF0EB;
+  color: #FF6B35;
+  font-size: 22rpx;
+  margin-bottom: 12rpx;
+}
+
+.message-title {
+  display: block;
+  font-size: 30rpx;
+  color: #1A1A1A;
+  font-weight: 700;
+}
+
+.message-time {
+  font-size: 22rpx;
+  color: #999;
+  white-space: nowrap;
+}
+
+.message-content {
+  font-size: 27rpx;
+  color: #666;
+  line-height: 1.7;
+}
+
+.message-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid #F3F3F3;
+}
+
+.message-status {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.message-status.is-unread {
+  color: #FF4757;
+}
+
+.message-status.is-read {
+  color: #999;
+}
+
+.message-action {
+  font-size: 24rpx;
+  color: #FF6B35;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 14rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999;
+  text-align: center;
+  line-height: 1.7;
+}

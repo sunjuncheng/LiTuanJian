@@ -1,0 +1,33 @@
+<view class="container">
+  <view wx:if="{{!isLoggedIn}}" class="empty card">
+    <text class="empty-title">请先登录</text>
+    <text class="empty-desc">登录后可查看你的聊天列表</text>
+    <button class="btn-primary login-btn" bindtap="goLogin">去登录</button>
+  </view>
+
+  <view wx:elif="{{list.length}}" class="chat-list">
+    <view class="chat-card card" wx:for="{{list}}" wx:key="conversationId" bindtap="openChat">
+      <view class="chat-avatar">💬</view>
+      <view class="chat-main">
+        <view class="chat-head">
+          <text class="chat-title">{{item.title}}</text>
+          <text class="chat-time">{{item.timeText || '刚刚'}}</text>
+        </view>
+        <text class="chat-subtitle">{{item.subtitle}}</text>
+        <view class="chat-footer">
+          <text class="online-badge">在线 {{item.onlineCount}} 人</text>
+          <text class="chat-action">进入群聊 ></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{!loading}}" class="empty card">
+    <text class="empty-title">暂无聊天会话</text>
+    <text class="empty-desc">加入队伍后，可在这里查看你的队伍群聊</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+</view>

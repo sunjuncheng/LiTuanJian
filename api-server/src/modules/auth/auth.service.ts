@@ -20,6 +20,17 @@ export class AuthService {
     private configService: SystemConfigService,
   ) {}
 
+  private buildUserInfo(user: User & { password?: string }) {
+    return {
+      id: user.id,
+      nickname: user.nickname || '',
+      avatarUrl: fixImageUrl(user.avatarUrl),
+      phone: user.phone || '',
+      hasPhone: !!user.phone,
+      hasPassword: !!user.password,
+    };
+  }
+
   async wxLogin(code: string, appId: string, secret: string) {
     const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appId}&secret=${secret}&js_code=${code}&grant_type=authorization_code`;
     const resp = await axios.get(url);
@@ -35,10 +46,17 @@ export class AuthService {
     const secret = this.configService.get('userWxAppSecret');
     const { openid } = await this.wxLogin(code, appId, secret);
 
-    let user = await this.userRepo.findOne({ where: { openid } });
+    let user = await this.userRepo.findOne({
+      where: { openid },
+      select: ['id', 'openid', 'nickname', 'avatarUrl', 'phone', 'password', 'status'],
+    });
     if (!user) {
       user = this.userRepo.create({ openid, nickname: '微信用户' });
       user = await this.userRepo.save(user);
+      user.password = '';
+    }
+    if (user.status !== 1) {
+      throw new UnauthorizedException('账号已被禁用');
     }
 
     const token = this.jwtService.sign({
@@ -49,11 +67,7 @@ export class AuthService {
 
     return {
       token,
-      userInfo: {
-        id: user.id,
-        nickname: user.nickname,
-        avatarUrl: fixImageUrl(user.avatarUrl),
-      },
+      userInfo: this.buildUserInfo(user),
     };
   }
 
@@ -153,7 +167,7 @@ export class AuthService {
   async userLogin(phone: string, password: string) {
     const user = await this.userRepo.findOne({
       where: { phone },
-      select: ['id', 'nickname', 'avatarUrl', 'password', 'status'],
+      select: ['id', 'nickname', 'avatarUrl', 'phone', 'password', 'status'],
     });
     if (!user) {
       throw new UnauthorizedException('手机号或密码错误');
@@ -172,11 +186,7 @@ export class AuthService {
     const token = this.jwtService.sign({ id: user.id, role: 'user' });
     return {
       token,
-      userInfo: {
-        id: user.id,
-        nickname: user.nickname,
-        avatarUrl: fixImageUrl(user.avatarUrl),
-      },
+      userInfo: this.buildUserInfo(user),
     };
   }
 
@@ -197,11 +207,7 @@ export class AuthService {
     const token = this.jwtService.sign({ id: saved.id, role: 'user' });
     return {
       token,
-      userInfo: {
-        id: saved.id,
-        nickname: saved.nickname,
-        avatarUrl: fixImageUrl(saved.avatarUrl),
-      },
+      userInfo: this.buildUserInfo({ ...saved, password: hashedPassword }),
     };
   }
 

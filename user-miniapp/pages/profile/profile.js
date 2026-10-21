@@ -1,4 +1,5 @@
 const auth = require('../../utils/auth.js')
+const { get } = require('../../utils/request.js')
 const { DEFAULT_AVATAR } = require('../../utils/default-images.js')
 const app = getApp()
 
@@ -12,22 +13,37 @@ Page({
     password: '',
     nickname: '',
     loading: false,
-    defaultAvatar: DEFAULT_AVATAR
+    defaultAvatar: DEFAULT_AVATAR,
+    unreadMessageCount: 0
   },
 
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ selected: 2 })
+      this.getTabBar().setData({ selected: 3 })
     }
     this.loadUserInfo()
   },
 
   loadUserInfo() {
     const userInfo = auth.getUserInfo()
+    const isLoggedIn = auth.isLoggedIn()
     this.setData({
       userInfo,
-      isLoggedIn: auth.isLoggedIn()
+      isLoggedIn,
+      unreadMessageCount: 0
     })
+    if (isLoggedIn) {
+      this.loadUnreadMessageCount()
+    }
+  },
+
+  async loadUnreadMessageCount() {
+    try {
+      const data = await get('/user/messages', {}, { silent: true })
+      this.setData({ unreadMessageCount: data.unreadCount || 0 })
+    } catch (e) {
+      console.error(e)
+    }
   },
 
   toggleLoginForm() {
@@ -51,6 +67,12 @@ Page({
     this.setData({ nickname: e.detail.value })
   },
 
+  needCompleteProfile(userInfo) {
+    if (!userInfo) return true
+    const nickname = String(userInfo.nickname || '').trim()
+    return !userInfo.hasPhone || !userInfo.avatarUrl || !nickname || nickname === '微信用户'
+  },
+
   async doLogin() {
     const { phone, password } = this.data
     if (!phone || !password) {
@@ -71,6 +93,40 @@ Page({
       wx.showToast({ title: '登录成功', icon: 'success' })
     } catch (e) {
       wx.showToast({ title: e || '登录失败', icon: 'none' })
+    } finally {
+      this.setData({ loading: false })
+    }
+  },
+
+  async doWxLogin() {
+    this.setData({ loading: true })
+    try {
+      const data = await app.login()
+      this.setData({
+        userInfo: data.userInfo,
+        isLoggedIn: true,
+        showLoginForm: false,
+        phone: '',
+        password: '',
+        nickname: ''
+      })
+      this.loadUnreadMessageCount()
+      wx.showToast({ title: '登录成功', icon: 'success' })
+      if (this.needCompleteProfile(data.userInfo)) {
+        setTimeout(() => {
+          wx.showModal({
+            title: '完成账号设置',
+            content: '为了方便识别队伍成员并保障账号使用，请继续完善头像、昵称和手机号。',
+            showCancel: false,
+            success: () => {
+              this.goEditProfile()
+            }
+          })
+        }, 500)
+      }
+    } catch (e) {
+      const msg = typeof e === 'string' ? e : (e && e.msg) || '微信登录失败'
+      wx.showToast({ title: msg, icon: 'none' })
     } finally {
       this.setData({ loading: false })
     }
@@ -127,8 +183,20 @@ Page({
     wx.navigateTo({ url: '/pages/profile-edit/profile-edit' })
   },
 
+  goBindPhone() {
+    wx.navigateTo({ url: '/pages/bind-phone/bind-phone' })
+  },
+
   goRecords() {
     wx.navigateTo({ url: '/pages/records/records' })
+  },
+
+  goMessages() {
+    if (!this.data.isLoggedIn) {
+      wx.showToast({ title: '请先登录', icon: 'none' })
+      return
+    }
+    wx.switchTab({ url: '/pages/messages/messages' })
   },
 
   goSettings() {

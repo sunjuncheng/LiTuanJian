@@ -1,10 +1,12 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Team } from '../../entities/team.entity';
 import { TeamMember } from '../../entities/team-member.entity';
 import { User } from '../../entities/user.entity';
 import { TaskParticipant } from '../../entities/task-participant.entity';
+import { ChatConversation } from '../../entities/chat-conversation.entity';
+import { ChatMessage } from '../../entities/chat-message.entity';
 import { fixImageUrl } from '../../common/utils/image';
 
 @Injectable()
@@ -14,6 +16,8 @@ export class TeamService {
     @InjectRepository(TeamMember) private memberRepo: Repository<TeamMember>,
     @InjectRepository(User) private userRepo: Repository<User>,
     @InjectRepository(TaskParticipant) private participantRepo: Repository<TaskParticipant>,
+    @InjectRepository(ChatConversation) private conversationRepo: Repository<ChatConversation>,
+    @InjectRepository(ChatMessage) private messageRepo: Repository<ChatMessage>,
   ) {}
 
   generateInviteCode() {
@@ -25,6 +29,61 @@ export class TeamService {
       where: { teamId, status: 'in_progress' },
     });
     return participants.length > 0;
+  }
+
+  private async getCurrentTeamAccess(userId: number) {
+    const member = await this.memberRepo.findOne({ where: { userId } });
+    if (!member) {
+      throw new BadRequestException('您还没有加入任何队伍');
+    }
+
+    const team = await this.teamRepo.findOne({ where: { id: member.teamId, status: 1 } });
+    if (!team) {
+      throw new NotFoundException('队伍不存在或已解散');
+    }
+
+    const members = await this.memberRepo.find({ where: { teamId: team.id } });
+    return { member, team, members };
+  }
+
+  private async getOrCreateTeamConversation(teamId: number) {
+    let conversation = await this.conversationRepo.findOne({
+      where: { type: 'team', teamId },
+    });
+
+    if (!conversation) {
+      conversation = this.conversationRepo.create({
+        type: 'team',
+        teamId,
+      });
+      conversation = await this.conversationRepo.save(conversation);
+    }
+
+    return conversation;
+  }
+
+  private async buildMessagePayloadList(messages: ChatMessage[]) {
+    if (!messages.length) return [];
+
+    const senderIds = [...new Set(messages.map((item) => item.senderId))];
+    const users = await this.userRepo.find({
+      where: { id: In(senderIds) },
+    });
+    const userMap = new Map(users.map((item) => [item.id, item]));
+
+    return messages.map((item) => {
+      const sender = userMap.get(item.senderId);
+      return {
+        id: item.id,
+        conversationId: item.conversationId,
+        senderId: item.senderId,
+        senderNickname: sender?.nickname || `用户${item.senderId}`,
+        senderAvatar: fixImageUrl(sender?.avatarUrl || ''),
+        messageType: item.messageType,
+        content: item.content,
+        createdAt: item.createdAt,
+      };
+    });
   }
 
   async createTeam(userId: number, name: string, taskId?: number) {
@@ -109,6 +168,79 @@ export class TeamService {
       leaderName: leader?.nickname || '',
       hasActiveTask,
       members: memberDetails,
+    };
+  }
+
+  async getTeamChat(userId: number) {
+    const { team, members } = await this.getCurrentTeamAccess(userId);
+    const conversation = await this.getOrCreateTeamConversation(team.id);
+
+    return {
+      conversationId: conversation.id,
+      teamId: team.id,
+      teamName: team.name,
+      memberCount: members.length,
+      lastMessage: conversation.lastMessage || '',
+      lastMessageTime: conversation.lastMessageTime,
+    };
+  }
+
+  async getTeamChatMessages(userId: number, beforeId?: number, limit = 50) {
+    const chat = await this.getTeamChat(userId);
+    const size = Math.min(Math.max(Number(limit) || 20, 1), 50);
+
+    const query = this.messageRepo
+      .createQueryBuilder('message')
+      .where('message.conversationId = :conversationId', {
+        conversationId: chat.conversationId,
+      });
+
+    if (beforeId && Number(beforeId) > 0) {
+      query.andWhere('message.id < :beforeId', { beforeId: Number(beforeId) });
+    }
+
+    const rows = await query
+      .orderBy('message.id', 'DESC')
+      .take(size)
+      .getMany();
+
+    const list = await this.buildMessagePayloadList(rows.reverse());
+
+    return {
+      ...chat,
+      list,
+      hasMore: rows.length === size,
+    };
+  }
+
+  async sendTeamChatMessage(userId: number, content: string) {
+    const text = String(content || '').trim();
+    if (!text) {
+      throw new BadRequestException('消息内容不能为空');
+    }
+    if (text.length > 500) {
+      throw new BadRequestException('单条消息不能超过500字');
+    }
+
+    const chat = await this.getTeamChat(userId);
+    const message = this.messageRepo.create({
+      conversationId: chat.conversationId,
+      senderId: userId,
+      messageType: 'text',
+      content: text,
+    });
+    const saved = await this.messageRepo.save(message);
+
+    await this.conversationRepo.update(chat.conversationId, {
+      lastMessage: text,
+      lastMessageTime: saved.createdAt,
+    });
+
+    const [payload] = await this.buildMessagePayloadList([saved]);
+    return {
+      ...payload,
+      teamId: chat.teamId,
+      teamName: chat.teamName,
     };
   }
 

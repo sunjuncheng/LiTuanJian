@@ -35,6 +35,14 @@
       <text class="invite-tip" wx:else>把邀请码分享给好友，一起组队完成任务</text>
     </view>
 
+    <view class="chat-entry" bindtap="goTeamChat">
+      <view class="chat-entry-main">
+        <text class="chat-entry-title">队伍群聊</text>
+        <text class="chat-entry-sub">和队友实时沟通任务进度与集合安排</text>
+      </view>
+      <text class="chat-entry-arrow">进入 ></text>
+    </view>
+
     <view class="member-section">
       <view class="member-title">队伍成员 ({{myTeam.memberCount}})</view>
       <view class="member-list">

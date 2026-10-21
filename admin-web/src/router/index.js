@@ -50,6 +50,12 @@ const routes = [
         meta: { title: '队伍管理', icon: 'UserFilled' }
       },
       {
+        path: 'live',
+        name: 'LiveManage',
+        component: () => import('@/views/LiveManage.vue'),
+        meta: { title: '直播管理', icon: 'VideoPlay' }
+      },
+      {
         path: 'settings',
         name: 'Settings',
         component: () => import('@/views/SystemSettings.vue'),

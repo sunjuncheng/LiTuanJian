@@ -1,4 +1,5 @@
 const app = getApp()
+const { DEFAULT_AVATAR } = require('../../utils/default-images.js')
 
 Page({
   data: {
@@ -7,10 +8,15 @@ Page({
     showLoginForm: true,
     phone: '',
     password: '',
-    loading: false
+    loading: false,
+    defaultAvatar: DEFAULT_AVATAR
   },
 
   onShow() {
+    const tabBar = this.getTabBar && this.getTabBar()
+    if (tabBar) {
+      tabBar.setData({ selected: 2 })
+    }
     const coachInfo = app.globalData.coachInfo || wx.getStorageSync('coach_info')
     this.setData({
       coachInfo,
@@ -66,5 +72,17 @@ Page({
         }
       }
     })
+  },
+
+  goTaskList() {
+    wx.switchTab({ url: '/pages/task-list/task-list' })
+  },
+
+  goReviewList() {
+    wx.switchTab({ url: '/pages/review/review' })
+  },
+
+  showSettingsTip() {
+    wx.showToast({ title: '设置功能开发中', icon: 'none' })
   }
 })

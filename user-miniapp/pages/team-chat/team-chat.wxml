@@ -1,0 +1,45 @@
+<view class="container chat-page" wx:if="{{chat}}">
+  <view class="chat-summary card">
+    <view class="team-meta">
+      <text class="team-name">{{chat.teamName}}</text>
+      <text class="team-status">{{connected ? ('实时连接中 · 在线 ' + onlineCount + ' 人') : '未连接，发送时会自动降级为普通请求'}}</text>
+    </view>
+    <text class="member-count">{{chat.memberCount}}人</text>
+  </view>
+
+  <scroll-view
+    class="chat-scroll"
+    scroll-y
+    scroll-with-animation
+    scroll-into-view="{{scrollIntoView}}"
+  >
+    <view wx:if="{{messageList.length === 0 && !loading}}" class="empty">
+      <view class="empty-icon">💬</view>
+      <text>还没有聊天消息，发一条打个招呼吧</text>
+    </view>
+
+    <view class="message-list">
+      <view class="message-item {{item.isSelf ? 'self' : ''}}" wx:for="{{messageList}}" wx:key="id">
+        <image wx:if="{{!item.isSelf}}" class="message-avatar" src="{{item.senderAvatar || defaultAvatar}}" mode="aspectFill"></image>
+        <view class="message-main">
+          <text wx:if="{{!item.isSelf}}" class="sender-name">{{item.senderNickname}}</text>
+          <view class="message-bubble">{{item.content}}</view>
+          <text class="message-time">{{item.timeText}}</text>
+        </view>
+      </view>
+      <view id="chat-bottom"></view>
+    </view>
+  </scroll-view>
+
+  <view class="chat-input-bar">
+    <input
+      class="chat-input"
+      placeholder="和队友说点什么..."
+      value="{{inputValue}}"
+      bindinput="onInput"
+      confirm-type="send"
+      bindconfirm="sendMessage"
+    />
+    <button class="send-btn" bindtap="sendMessage">发送</button>
+  </view>
+</view>

@@ -1,0 +1,51 @@
+<view class="container">
+  <view class="loading" wx:if="{{loading}}">直播内容加载中...</view>
+
+  <view wx:elif="{{detail}}" class="live-page">
+    <view class="player-card card">
+      <view class="player-wrap" wx:if="{{detail.status === 'live' && detail.playUrl}}">
+        <live-player
+          id="livePlayer"
+          src="{{detail.playUrl}}"
+          mode="live"
+          autoplay
+          object-fit="contain"
+          bindstatechange="onStateChange"
+        ></live-player>
+      </view>
+      <view class="offline-box" wx:else>
+        <text class="offline-title">{{detail.status === 'ended' ? '本场直播已结束' : '直播暂未开始'}}</text>
+        <text class="offline-desc">{{detail.status === 'ended' ? '可以在后台继续创建下一场直播。' : '主播准备完成后，会在后台切换到直播中。'}}</text>
+      </view>
+      <text class="player-tip" wx:if="{{playerState}}">{{playerState}}</text>
+    </view>
+
+    <view class="summary card">
+      <view class="summary-head">
+        <view class="summary-main">
+          <text class="title">{{detail.title}}</text>
+          <text class="meta">{{detail.anchorName}} · {{detail.startedText || detail.createdText || '待开播'}}</text>
+        </view>
+        <text class="tag {{detail.status === 'live' ? 'tag-red' : detail.status === 'ended' ? 'tag-gray' : 'tag-orange'}}">{{detail.statusText}}</text>
+      </view>
+      <text class="desc">{{detail.description || '本场直播暂未填写简介。'}}</text>
+    </view>
+
+    <view class="summary card" wx:if="{{detail.streamName}}">
+      <text class="section-title">直播信息</text>
+      <view class="info-row">
+        <text class="info-label">流名称</text>
+        <text class="info-value">{{detail.streamName}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">播放地址</text>
+        <text class="info-value info-link">{{detail.playUrl || '待生成'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty card" wx:else>
+    <text class="empty-title">暂无可观看的直播</text>
+    <text class="empty-desc">请稍后再来，或返回直播列表查看已创建的直播安排。</text>
+  </view>
+</view>

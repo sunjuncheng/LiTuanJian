@@ -1,0 +1,109 @@
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.chat-card {
+  display: flex;
+  gap: 20rpx;
+  align-items: flex-start;
+}
+
+.chat-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF4757 100%);
+  color: #fff;
+  font-size: 42rpx;
+  flex-shrink: 0;
+}
+
+.chat-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-bottom: 10rpx;
+}
+
+.chat-title {
+  font-size: 30rpx;
+  color: #1A1A1A;
+  font-weight: 700;
+}
+
+.chat-time {
+  font-size: 22rpx;
+  color: #999;
+  white-space: nowrap;
+}
+
+.chat-subtitle {
+  display: block;
+  font-size: 25rpx;
+  color: #777;
+  line-height: 1.6;
+}
+
+.chat-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+}
+
+.online-badge {
+  font-size: 22rpx;
+  color: #1FA971;
+  background: #EAF8F2;
+  border-radius: 999rpx;
+  padding: 6rpx 16rpx;
+}
+
+.chat-action {
+  font-size: 24rpx;
+  color: #FF6B35;
+  font-weight: 600;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 14rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.login-btn {
+  width: 100%;
+  margin-top: 32rpx;
+}
+
+.loading {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #999;
+}

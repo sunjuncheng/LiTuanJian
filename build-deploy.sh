@@ -21,12 +21,12 @@ echo "[2/6] 构建 API 服务 (nest build)..."
 cd "$ROOT_DIR/api-server"
 npm run build
 
-# 复制 API 服务文件（包含 node_modules）
+# 复制 API 服务文件（不包含 node_modules，避免 macOS/Linux 依赖不兼容）
 echo ""
-echo "[3/6] 复制 API 服务文件（含 node_modules）..."
+echo "[3/6] 复制 API 服务文件（不含 node_modules）..."
 cp -r "$ROOT_DIR/api-server/dist" "$DEPLOY_DIR/tuanjian-api/dist"
-cp -r "$ROOT_DIR/api-server/node_modules" "$DEPLOY_DIR/tuanjian-api/node_modules"
 cp "$ROOT_DIR/api-server/package.json" "$DEPLOY_DIR/tuanjian-api/package.json"
+cp "$ROOT_DIR/api-server/package-lock.json" "$DEPLOY_DIR/tuanjian-api/package-lock.json" 2>/dev/null || true
 cp "$ROOT_DIR/api-server/ecosystem.config.js" "$DEPLOY_DIR/tuanjian-api/ecosystem.config.js" 2>/dev/null || true
 cp "$ROOT_DIR/api-server/.env" "$DEPLOY_DIR/tuanjian-api/.env" 2>/dev/null || true
 
@@ -60,5 +60,6 @@ echo ""
 echo "上传到服务器后："
 echo "  1. 解压 tuanjian-api.zip 到 /www/wwwroot/123.56.72.218/tuanjian-api/"
 echo "  2. 解压 tuanjian-admin.zip 到 /www/wwwroot/123.56.72.218/tuanjian-admin/"
-echo "  3. pm2 restart tuanjian-api"
+echo "  3. cd /www/wwwroot/123.56.72.218/tuanjian-api && npm ci --omit=dev"
+echo "  4. pm2 restart tuanjian-api"
 echo ""

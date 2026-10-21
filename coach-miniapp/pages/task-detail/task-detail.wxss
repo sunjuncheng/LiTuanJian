@@ -1,12 +1,66 @@
+.task-header {
+  margin-bottom: 24rpx;
+  padding: 0;
+  overflow: hidden;
+}
+
+.task-cover {
+  position: relative;
+  width: 100%;
+  height: 280rpx;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+}
+
+.cover-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 28%, rgba(0, 0, 0, 0.72) 100%);
+}
+
+.task-title-overlay {
+  position: absolute;
+  left: 28rpx;
+  right: 28rpx;
+  bottom: 28rpx;
+  color: #fff;
+  font-size: 38rpx;
+  font-weight: 700;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.34);
+}
+
+.task-tags {
+  display: flex;
+  gap: 12rpx;
+  padding: 24rpx;
+  flex-wrap: wrap;
+}
+
 .task-info {
   margin-bottom: 24rpx;
 }
 
-.task-name {
-  font-size: 36rpx;
-  font-weight: bold;
+.section {
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
   color: #1A1A1A;
-  margin-bottom: 14rpx;
+  font-weight: 700;
+  margin-bottom: 18rpx;
+}
+
+.section-content {
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: #666;
 }
 
 .task-meta {
@@ -15,6 +69,7 @@
   font-size: 24rpx;
   color: #888;
   margin-bottom: 20rpx;
+  flex-wrap: wrap;
 }
 
 .overall-progress {
@@ -43,6 +98,130 @@
   font-size: 26rpx;
   color: #FF6B35;
   font-weight: bold;
+}
+
+.info-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.info-grid.compact {
+  margin-top: 16rpx;
+}
+
+.info-item {
+  width: calc(50% - 8rpx);
+  background: #FFF7F3;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.info-item.full {
+  width: 100%;
+}
+
+.info-label {
+  display: block;
+  font-size: 22rpx;
+  color: #999;
+  margin-bottom: 10rpx;
+}
+
+.info-value {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.checkpoint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.checkpoint-card {
+  padding: 24rpx;
+  background: linear-gradient(180deg, #FFFDFC 0%, #FFF6F2 100%);
+  border-radius: 20rpx;
+  border: 1rpx solid #FFE5DA;
+}
+
+.checkpoint-head {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+}
+
+.checkpoint-badge {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF4757 100%);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checkpoint-head-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.checkpoint-name {
+  display: block;
+  font-size: 30rpx;
+  color: #1A1A1A;
+  font-weight: 700;
+}
+
+.checkpoint-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 6rpx;
+}
+
+.reference-block {
+  margin-top: 18rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid #FFE4D7;
+}
+
+.reference-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 14rpx;
+}
+
+.reference-tip {
+  font-size: 22rpx;
+  color: #999;
+  text-align: right;
+}
+
+.reference-img {
+  width: 100%;
+  height: 280rpx;
+  border-radius: 16rpx;
+  background: #F5F6F8;
+}
+
+.empty-checkpoint {
+  padding: 32rpx 0 12rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #999;
 }
 
 .tabs {
@@ -85,6 +264,7 @@
   border-radius: 50%;
   margin-right: 20rpx;
   background: #F5F6F8;
+  border: 2rpx solid #FFF0EB;
 }
 
 .team-avatar {
@@ -114,6 +294,7 @@
 
 .p-progress {
   text-align: right;
+  min-width: 100rpx;
 }
 
 .p-progress-num {

@@ -141,6 +141,10 @@ Page({
     })
   },
 
+  goTeamChat() {
+    wx.navigateTo({ url: '/pages/team-chat/team-chat' })
+  },
+
   leaveTeam() {
     const isLeader = this.data.myTeam.isLeader
     const title = isLeader ? '确认解散队伍？' : '确认退出队伍？'

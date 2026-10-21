@@ -102,6 +102,39 @@
   margin-top: 12rpx;
 }
 
+.chat-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 71, 87, 0.08));
+  border-radius: 20rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.chat-entry-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.chat-entry-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.chat-entry-sub {
+  font-size: 22rpx;
+  color: #888;
+}
+
+.chat-entry-arrow {
+  font-size: 24rpx;
+  color: #FF6B35;
+  font-weight: 600;
+}
+
 .member-section {
   margin-bottom: 32rpx;
 }

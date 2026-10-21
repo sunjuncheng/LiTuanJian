@@ -5,6 +5,7 @@ import { join } from 'path';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { TeamChatGateway } from './modules/team/team-chat.gateway';
 
 async function bootstrap() {
   process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
@@ -37,6 +38,8 @@ async function bootstrap() {
 
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
+
+  app.get(TeamChatGateway).attachServer(app.getHttpServer());
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

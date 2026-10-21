@@ -4,6 +4,7 @@ Page({
   data: {
     taskId: '',
     participantId: '',
+    checkpointId: '',
     checkpoints: [],
     currentIndex: 0,
     rejectReason: '',
@@ -13,7 +14,8 @@ Page({
   onLoad(options) {
     this.setData({
       taskId: options.taskId,
-      participantId: options.participantId
+      participantId: options.participantId,
+      checkpointId: options.checkpointId || ''
     })
     this.loadCheckpoints()
   },
@@ -24,7 +26,12 @@ Page({
         taskId: this.data.taskId,
         participantId: this.data.participantId
       })
-      this.setData({ checkpoints })
+      let currentIndex = 0
+      if (this.data.checkpointId) {
+        const targetIndex = checkpoints.findIndex(item => String(item.id) === String(this.data.checkpointId))
+        currentIndex = targetIndex >= 0 ? targetIndex : 0
+      }
+      this.setData({ checkpoints, currentIndex })
     } catch (e) {
       console.error(e)
     }

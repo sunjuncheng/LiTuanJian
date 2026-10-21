@@ -1,5 +1,6 @@
 const { post } = require('../../utils/request.js')
 const location = require('../../utils/location.js')
+const { DEFAULT_IMAGE, DEFAULT_TASK_COVER } = require('../../utils/default-images.js')
 const app = getApp()
 
 Page({
@@ -23,7 +24,9 @@ Page({
     },
     checkpoints: [],
     rangeOptions: [30, 50, 100],
-    submitting: false
+    submitting: false,
+    defaultCover: DEFAULT_TASK_COVER,
+    defaultImage: DEFAULT_IMAGE
   },
 
   onInput(e) {

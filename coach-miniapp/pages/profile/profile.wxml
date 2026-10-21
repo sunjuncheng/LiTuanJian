@@ -1,9 +1,12 @@
 <view class="container">
   <view class="profile-header card">
-    <view wx:if="{{isLoggedIn}}">
-      <image class="avatar" src="{{coachInfo.avatarUrl || 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132'}}"></image>
-      <text class="nickname">{{coachInfo.name}}</text>
-      <text class="role-tag">教练</text>
+    <view wx:if="{{isLoggedIn}}" class="user-info">
+      <image class="avatar" src="{{coachInfo.avatarUrl || defaultAvatar}}" mode="aspectFill"></image>
+      <view class="user-meta">
+        <text class="nickname">{{coachInfo.name}}</text>
+        <text class="user-phone">{{coachInfo.phone || '已绑定教练账号'}}</text>
+        <text class="role-tag">教练</text>
+      </view>
     </view>
     <view wx:else class="login-area">
       <text class="login-tip">教练登录</text>
@@ -20,17 +23,17 @@
   </view>
 
   <view class="menu-list card">
-    <view class="menu-item">
-      <text class="menu-icon">📊</text>
-      <text class="menu-text">数据统计</text>
+    <view class="menu-item" bindtap="goTaskList">
+      <text class="menu-icon">🏃</text>
+      <text class="menu-text">任务概览</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item">
+    <view class="menu-item" bindtap="goReviewList">
       <text class="menu-icon">📋</text>
-      <text class="menu-text">历史活动</text>
+      <text class="menu-text">审核记录</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item">
+    <view class="menu-item" bindtap="showSettingsTip">
       <text class="menu-icon">⚙️</text>
       <text class="menu-text">设置</text>
       <text class="menu-arrow">></text>

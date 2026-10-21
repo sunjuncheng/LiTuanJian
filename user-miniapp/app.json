@@ -3,10 +3,16 @@
     "pages/index/index",
     "pages/task-detail/task-detail",
     "pages/team/team",
+    "pages/chat-list/chat-list",
+    "pages/team-chat/team-chat",
+    "pages/live-list/live-list",
+    "pages/live-watch/live-watch",
     "pages/start-point/start-point",
     "pages/checkin/checkin",
     "pages/profile/profile",
+    "pages/messages/messages",
     "pages/profile-edit/profile-edit",
+    "pages/bind-phone/bind-phone",
     "pages/change-password/change-password",
     "pages/records/records",
     "pages/settings/settings"
@@ -32,6 +38,10 @@
       {
         "pagePath": "pages/team/team",
         "text": "我的队伍"
+      },
+      {
+        "pagePath": "pages/messages/messages",
+        "text": "消息"
       },
       {
         "pagePath": "pages/profile/profile",

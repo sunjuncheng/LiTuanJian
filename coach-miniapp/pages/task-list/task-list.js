@@ -1,13 +1,19 @@
 const { get, post } = require('../../utils/request.js')
+const { DEFAULT_TASK_COVER } = require('../../utils/default-images.js')
 const app = getApp()
 
 Page({
   data: {
     taskList: [],
-    loading: false
+    loading: false,
+    defaultCover: DEFAULT_TASK_COVER
   },
 
   onShow() {
+    const tabBar = this.getTabBar && this.getTabBar()
+    if (tabBar) {
+      tabBar.setData({ selected: 0 })
+    }
     if (!app.globalData.token && !wx.getStorageSync('coach_token')) {
       return
     }
@@ -23,7 +29,11 @@ Page({
     this.setData({ loading: true })
     try {
       const list = await get('/coach/tasks')
-      this.setData({ taskList: list || [] })
+      const taskList = (list || []).map(item => ({
+        ...item,
+        coverImage: item.coverImage || DEFAULT_TASK_COVER
+      }))
+      this.setData({ taskList })
     } catch (e) {
       console.error(e)
     } finally {

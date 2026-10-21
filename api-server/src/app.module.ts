@@ -12,6 +12,7 @@ import { TaskModule } from './modules/task/task.module';
 import { TeamModule } from './modules/team/team.module';
 import { CheckinModule } from './modules/checkin/checkin.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { LiveModule } from './modules/live/live.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { UploadModule } from './modules/upload/upload.module';
     TeamModule,
     CheckinModule,
     UploadModule,
+    LiveModule,
   ],
 })
 export class AppModule {}

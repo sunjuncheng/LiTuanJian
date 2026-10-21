@@ -23,10 +23,10 @@
     <view class="form-item">
       <text class="form-label">任务封面图</text>
       <view class="cover-upload" bindtap="uploadCoverImage">
-        <image wx:if="{{form.coverImage}}" class="cover-preview" src="{{form.coverImage}}" mode="aspectFill"></image>
-        <view wx:else class="cover-placeholder">
-          <text class="cover-icon">📷</text>
-          <text class="cover-text">点击上传封面图</text>
+        <image class="cover-preview" src="{{form.coverImage || defaultCover}}" mode="aspectFill"></image>
+        <view class="cover-placeholder">
+          <text class="cover-icon">{{form.coverImage ? '重新上传' : '点击上传封面图'}}</text>
+          <text class="cover-text">{{form.coverImage ? '已设置任务封面' : '建议使用横版活动海报或场景图'}}</text>
         </view>
       </view>
     </view>
@@ -113,10 +113,12 @@
         </view>
         <view class="form-item">
           <text class="form-label">官方参照图 *</text>
-          <view class="img-upload" data-index="{{index}}" bindtap="uploadReferenceImage" wx:if="{{!item.referenceImage}}">
-            <text>点击上传参照图</text>
+          <view class="img-upload" data-index="{{index}}" bindtap="uploadReferenceImage">
+            <image class="ref-img" src="{{item.referenceImage || defaultImage}}" mode="aspectFill"></image>
+            <view class="img-mask">
+              <text class="img-upload-text">{{item.referenceImage ? '重新上传参照图' : '点击上传参照图'}}</text>
+            </view>
           </view>
-          <image class="ref-img" src="{{item.referenceImage}}" mode="aspectFill" wx:if="{{item.referenceImage}}"></image>
         </view>
         <view class="form-item">
           <switch checked="{{item.requireGroupPhoto}}" data-index="{{index}}" data-field="requireGroupPhoto" bindchange="onCheckboxChange" color="#FF6B35" />

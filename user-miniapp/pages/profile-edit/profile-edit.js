@@ -1,4 +1,4 @@
-const { get, put } = require('../../utils/request.js')
+const { put } = require('../../utils/request.js')
 const auth = require('../../utils/auth.js')
 const { DEFAULT_AVATAR } = require('../../utils/default-images.js')
 const app = getApp()
@@ -13,7 +13,7 @@ Page({
   },
 
   onLoad() {
-    const userInfo = auth.getUserInfo()
+    const userInfo = auth.getUserInfo() || {}
     this.setData({
       userInfo,
       nickname: userInfo.nickname || '',
@@ -23,6 +23,15 @@ Page({
 
   onNicknameInput(e) {
     this.setData({ nickname: e.detail.value })
+  },
+
+  onChooseAvatar(e) {
+    const avatarUrl = e && e.detail ? e.detail.avatarUrl : ''
+    if (!avatarUrl) {
+      wx.showToast({ title: '未选择头像', icon: 'none' })
+      return
+    }
+    this.uploadAvatar(avatarUrl)
   },
 
   chooseAvatar() {
@@ -90,5 +99,9 @@ Page({
 
   goChangePassword() {
     wx.navigateTo({ url: '/pages/change-password/change-password' })
+  },
+
+  goBindPhone() {
+    wx.navigateTo({ url: '/pages/bind-phone/bind-phone' })
   }
 })

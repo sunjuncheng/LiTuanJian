@@ -11,6 +11,11 @@ export interface AppConfig {
   coachWxAppSecret: string;
   uploadSizeLimit: number;
   defaultLocationRange: number;
+  aliLivePushDomain: string;
+  aliLivePlayDomain: string;
+  aliLiveAppName: string;
+  aliLiveAuthKey: string;
+  aliLiveAuthExpireSeconds: number;
 }
 
 const DEFAULTS: AppConfig = {
@@ -21,6 +26,11 @@ const DEFAULTS: AppConfig = {
   coachWxAppSecret: process.env.WX_COACH_SECRET || '',
   uploadSizeLimit: 10,
   defaultLocationRange: 50,
+  aliLivePushDomain: process.env.ALI_LIVE_PUSH_DOMAIN || '',
+  aliLivePlayDomain: process.env.ALI_LIVE_PLAY_DOMAIN || '',
+  aliLiveAppName: process.env.ALI_LIVE_APP_NAME || 'live',
+  aliLiveAuthKey: process.env.ALI_LIVE_AUTH_KEY || '',
+  aliLiveAuthExpireSeconds: Number(process.env.ALI_LIVE_AUTH_EXPIRE_SECONDS) || 3600,
 };
 
 @Injectable()
@@ -50,6 +60,12 @@ export class SystemConfigService implements OnModuleInit {
       coachWxAppSecret: map.coachWxAppSecret || DEFAULTS.coachWxAppSecret,
       uploadSizeLimit: Number(map.uploadSizeLimit) || DEFAULTS.uploadSizeLimit,
       defaultLocationRange: Number(map.defaultLocationRange) || DEFAULTS.defaultLocationRange,
+      aliLivePushDomain: map.aliLivePushDomain || DEFAULTS.aliLivePushDomain,
+      aliLivePlayDomain: map.aliLivePlayDomain || DEFAULTS.aliLivePlayDomain,
+      aliLiveAppName: map.aliLiveAppName || DEFAULTS.aliLiveAppName,
+      aliLiveAuthKey: map.aliLiveAuthKey || DEFAULTS.aliLiveAuthKey,
+      aliLiveAuthExpireSeconds:
+        Number(map.aliLiveAuthExpireSeconds) || DEFAULTS.aliLiveAuthExpireSeconds,
     };
   }
 

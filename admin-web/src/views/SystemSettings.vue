@@ -29,6 +29,23 @@
         <el-form-item label="默认定位误差(米)">
           <el-input-number v-model="form.defaultLocationRange" :min="10" :max="200" />
         </el-form-item>
+
+        <el-divider content-position="left">阿里云直播配置</el-divider>
+        <el-form-item label="推流域名">
+          <el-input v-model="form.aliLivePushDomain" placeholder="例如 push.live.xxx.com" />
+        </el-form-item>
+        <el-form-item label="播放域名">
+          <el-input v-model="form.aliLivePlayDomain" placeholder="例如 play.live.xxx.com" />
+        </el-form-item>
+        <el-form-item label="应用名称 AppName">
+          <el-input v-model="form.aliLiveAppName" placeholder="默认填 live" />
+        </el-form-item>
+        <el-form-item label="鉴权 Key">
+          <el-input v-model="form.aliLiveAuthKey" type="password" show-password placeholder="未开启鉴权可先留空" />
+        </el-form-item>
+        <el-form-item label="鉴权有效期(秒)">
+          <el-input-number v-model="form.aliLiveAuthExpireSeconds" :min="300" :max="86400" />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSave" :loading="saving">保存设置</el-button>
         </el-form-item>
@@ -52,7 +69,12 @@ const form = reactive({
   coachWxAppId: '',
   coachWxAppSecret: '',
   uploadSizeLimit: 10,
-  defaultLocationRange: 50
+  defaultLocationRange: 50,
+  aliLivePushDomain: '',
+  aliLivePlayDomain: '',
+  aliLiveAppName: 'live',
+  aliLiveAuthKey: '',
+  aliLiveAuthExpireSeconds: 3600
 })
 
 onMounted(async () => {

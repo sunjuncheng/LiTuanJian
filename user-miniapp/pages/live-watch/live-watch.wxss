@@ -1,0 +1,138 @@
+.live-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.player-wrap {
+  width: 100%;
+  height: 420rpx;
+  background: #000;
+}
+
+.player-wrap live-player {
+  width: 100%;
+  height: 100%;
+}
+
+.offline-box {
+  min-height: 320rpx;
+  padding: 60rpx 36rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+}
+
+.offline-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.offline-desc {
+  margin-top: 18rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+}
+
+.player-tip {
+  display: block;
+  padding: 18rpx 24rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.summary-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.summary-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.meta {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.desc {
+  display: block;
+  margin-top: 18rpx;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+.section-title {
+  display: block;
+  margin-bottom: 14rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 16rpx 0;
+  border-top: 1rpx solid #f2f2f2;
+}
+
+.info-row:first-of-type {
+  border-top: none;
+}
+
+.info-label {
+  width: 120rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.info-value {
+  flex: 1;
+  text-align: right;
+  font-size: 24rpx;
+  color: #333;
+  word-break: break-all;
+  line-height: 1.6;
+}
+
+.info-link {
+  color: #ff6b35;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999;
+  line-height: 1.7;
+}

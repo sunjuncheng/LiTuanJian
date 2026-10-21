@@ -25,3 +25,8 @@ export const updateSystemConfig = (data) => request.put('/admin/settings', data)
 
 export const getTeamList = (params) => request.get('/admin/teams', { params })
 export const deleteTeam = (id) => request.delete(`/admin/teams/${id}`)
+
+export const getLiveList = () => request.get('/admin/live')
+export const createLiveRoom = (data) => request.post('/admin/live', data)
+export const startLiveRoom = (id) => request.post(`/admin/live/${id}/start`)
+export const stopLiveRoom = (id) => request.post(`/admin/live/${id}/stop`)

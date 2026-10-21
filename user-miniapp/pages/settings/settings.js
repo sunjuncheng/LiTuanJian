@@ -1,9 +1,15 @@
 const auth = require('../../utils/auth.js')
-const app = getApp()
 
 Page({
   data: {
-    version: '1.0.0'
+    version: '1.0.0',
+    userInfo: null
+  },
+
+  onShow() {
+    this.setData({
+      userInfo: auth.getUserInfo()
+    })
   },
 
   clearCache() {
@@ -25,6 +31,14 @@ Page({
       content: '版本：' + this.data.version + '\n一款团队协作打卡小程序',
       showCancel: false
     })
+  },
+
+  goProfileEdit() {
+    wx.navigateTo({ url: '/pages/profile-edit/profile-edit' })
+  },
+
+  goBindPhone() {
+    wx.navigateTo({ url: '/pages/bind-phone/bind-phone' })
   },
 
   logout() {

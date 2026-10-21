@@ -1,0 +1,53 @@
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.intro-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.intro-desc {
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: #666;
+}
+
+.form-section {
+  margin-top: 20rpx;
+  padding: 0;
+  overflow: hidden;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.form-row:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  width: 180rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  text-align: right;
+}
+
+.save-area {
+  margin-top: 60rpx;
+  padding: 0 24rpx;
+}
