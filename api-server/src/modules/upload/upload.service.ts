@@ -6,12 +6,20 @@ import { SystemConfigService } from '../system-config/system-config.service';
 
 @Injectable()
 export class UploadService {
-  private uploadDir = path.resolve(__dirname, '../../../uploads');
+  private uploadDir = this.resolveUploadDir();
 
   constructor(private configService: SystemConfigService) {
     if (!fs.existsSync(this.uploadDir)) {
       fs.mkdirSync(this.uploadDir, { recursive: true });
     }
+  }
+
+  private resolveUploadDir() {
+    const configuredDir = process.env.UPLOAD_DIR || './uploads';
+    if (path.isAbsolute(configuredDir)) {
+      return configuredDir;
+    }
+    return path.resolve(process.cwd(), configuredDir);
   }
 
   private checkSize(bytes: number) {

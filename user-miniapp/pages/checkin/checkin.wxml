@@ -25,6 +25,34 @@
 
     <view class="cp-location">📍 {{checkpoints[currentIndex].location}}</view>
 
+    <view class="map-card">
+      <map
+        class="map-view"
+        latitude="{{mapLatitude}}"
+        longitude="{{mapLongitude}}"
+        scale="{{mapScale}}"
+        markers="{{markers}}"
+        circles="{{circles}}"
+        include-points="{{includePoints}}"
+        show-location
+        enable-zoom
+        enable-scroll
+      ></map>
+      <view class="map-actions">
+        <button class="mini-btn" bindtap="openCheckpointLocation">查看打卡点位置</button>
+        <button class="mini-btn mini-btn-outline" bindtap="moveToMyLocation">回到我的位置</button>
+      </view>
+    </view>
+
+    <view class="distance-info" wx:if="{{currentLocation}}">
+      <view class="distance-value" wx:if="{{!inRange}}">
+        距打卡点约 <text class="distance-num">{{distance}}</text> 米
+      </view>
+      <view class="distance-value success" wx:if="{{inRange}}">
+        ✅ 已在打卡点范围内
+      </view>
+    </view>
+
     <view class="reference-section" wx:if="{{checkpoints[currentIndex].referenceImage}}">
       <view class="section-label">官方参照图</view>
       <image class="reference-img" src="{{checkpoints[currentIndex].referenceImage}}" mode="aspectFill"></image>

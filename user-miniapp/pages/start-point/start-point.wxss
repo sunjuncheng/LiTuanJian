@@ -31,8 +31,18 @@
   border-radius: 16rpx;
 }
 
-.map-placeholder {
-  height: 400rpx;
+.map-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.map-view {
+  width: 100%;
+  height: 420rpx;
+}
+
+.map-empty {
+  height: 320rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,6 +50,32 @@
   font-size: 26rpx;
   background: #F8F9FB;
   border: 2rpx dashed #e0e0e0;
+}
+
+.map-actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 24rpx 24rpx;
+  background: #fff;
+}
+
+.mini-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8A4C 100%);
+  color: #fff;
+}
+
+.mini-btn::after {
+  border: none;
+}
+
+.mini-btn-outline {
+  background: #fff3ee;
+  color: #FF6B35;
 }
 
 .distance-info {

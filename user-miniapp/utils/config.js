@@ -1,5 +1,5 @@
 const config = {
-  apiBaseUrl: 'http://123.56.72.218/api',
+  apiBaseUrl: 'https://api.xingcheng.cloud/api',
   mapKey: '',
   version: '1.0.0'
 }

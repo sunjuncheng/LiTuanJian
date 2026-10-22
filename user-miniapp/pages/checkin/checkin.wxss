@@ -63,6 +63,64 @@
   margin-bottom: 20rpx;
 }
 
+.map-card {
+  overflow: hidden;
+  border-radius: 16rpx;
+  background: #fff;
+  margin-bottom: 24rpx;
+}
+
+.map-view {
+  width: 100%;
+  height: 360rpx;
+}
+
+.map-actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 20rpx 24rpx;
+}
+
+.mini-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8A4C 100%);
+  color: #fff;
+}
+
+.mini-btn::after {
+  border: none;
+}
+
+.mini-btn-outline {
+  background: #fff3ee;
+  color: #FF6B35;
+}
+
+.distance-info {
+  text-align: center;
+  padding: 0 0 24rpx;
+}
+
+.distance-value {
+  font-size: 28rpx;
+  color: #FF6B35;
+  font-weight: 600;
+}
+
+.distance-value.success {
+  color: #34C759;
+}
+
+.distance-num {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #FF4757;
+}
+
 .section-label {
   font-size: 26rpx;
   color: #666;

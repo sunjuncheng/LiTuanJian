@@ -6,8 +6,25 @@
     <view class="range-tip">允许误差范围：{{task.startPoint.range}} 米</view>
   </view>
 
-  <view class="map-placeholder card">
-    <text>地图占位（接入微信地图组件）</text>
+  <view class="map-card card">
+    <map
+      wx:if="{{hasValidStartPoint}}"
+      class="map-view"
+      latitude="{{mapLatitude}}"
+      longitude="{{mapLongitude}}"
+      scale="{{mapScale}}"
+      markers="{{markers}}"
+      circles="{{circles}}"
+      include-points="{{includePoints}}"
+      show-location
+      enable-zoom
+      enable-scroll
+    ></map>
+    <view wx:else class="map-empty">暂未配置启动点坐标</view>
+    <view class="map-actions" wx:if="{{hasValidStartPoint}}">
+      <button class="mini-btn" bindtap="openStartPointLocation">查看起点位置</button>
+      <button class="mini-btn mini-btn-outline" bindtap="moveToMyLocation">回到我的位置</button>
+    </view>
   </view>
 
   <view class="distance-info card" wx:if="{{currentLocation}}">

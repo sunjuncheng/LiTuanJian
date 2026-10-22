@@ -24,9 +24,20 @@ Page({
     this.loadUserInfo()
   },
 
-  loadUserInfo() {
-    const userInfo = auth.getUserInfo()
+  async loadUserInfo() {
+    let userInfo = auth.getUserInfo()
     const isLoggedIn = auth.isLoggedIn()
+
+    if (isLoggedIn) {
+      try {
+        userInfo = await get('/user/profile', {}, { silent: true })
+        auth.setUserInfo(userInfo)
+        app.globalData.userInfo = userInfo
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
     this.setData({
       userInfo,
       isLoggedIn,

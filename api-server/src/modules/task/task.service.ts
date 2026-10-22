@@ -75,6 +75,7 @@ export class TaskService {
         taskId: task.id,
         name: task.name,
         description: task.description,
+        coverImage: this.fixImageUrl(task.coverImage),
         participantType: p.participantType,
         participantTypeText: p.participantType === 'solo' ? '单人' : '团队',
         status: displayStatus,
@@ -192,7 +193,13 @@ export class TaskService {
     for (const task of tasks) {
       const checkpointCount = await this.checkpointRepo.count({ where: { taskId: task.id } });
       const participantCount = await this.participantRepo.count({ where: { taskId: task.id } });
-      result.push({ ...task, checkpointCount, participantCount, completionRate: 0 });
+      result.push({
+        ...task,
+        coverImage: this.fixImageUrl(task.coverImage),
+        checkpointCount,
+        participantCount,
+        completionRate: 0,
+      });
     }
     return result;
   }
