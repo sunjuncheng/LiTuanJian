@@ -139,6 +139,13 @@
   margin-bottom: 12rpx;
 }
 
+.empty-icon-image {
+  width: 88rpx;
+  height: 88rpx;
+  margin: 0 auto 14rpx;
+  display: block;
+}
+
 .loading {
   padding: 40rpx 0;
   text-align: center;

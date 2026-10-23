@@ -1,11 +1,20 @@
 const { get } = require('../../utils/request.js')
-const { DEFAULT_TASK_COVER } = require('../../utils/default-images.js')
+const {
+  DEFAULT_TASK_COVER,
+  ILLUSTRATION_RECORDS
+} = require('../../utils/default-images.js')
 
 Page({
   data: {
     records: [],
     loading: false,
-    defaultCover: DEFAULT_TASK_COVER
+    defaultCover: DEFAULT_TASK_COVER,
+    recordsIllustration: ILLUSTRATION_RECORDS,
+    icons: {
+      records: '/assets/icons/records.svg',
+      success: '/assets/icons/success.svg',
+      location: '/assets/icons/location.svg'
+    }
   },
 
   onShow() {

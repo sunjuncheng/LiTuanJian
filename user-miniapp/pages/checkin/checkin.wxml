@@ -16,6 +16,7 @@
   </view>
 
   <view class="checkpoint-detail card" wx:if="{{checkpoints[currentIndex]}}">
+    <image class="checkin-illustration" src="{{checkinIllustration}}" mode="widthFix"></image>
     <view class="cp-header">
       <text class="cp-name">{{checkpoints[currentIndex].name}}</text>
       <text class="tag {{checkpoints[currentIndex].status === 'passed' ? 'tag-green' : checkpoints[currentIndex].status === 'reviewing' ? 'tag-orange' : 'tag-gray'}}">
@@ -23,7 +24,10 @@
       </text>
     </view>
 
-    <view class="cp-location">📍 {{checkpoints[currentIndex].location}}</view>
+    <view class="cp-location">
+      <image class="inline-icon" src="{{icons.location}}" mode="aspectFit"></image>
+      <text>{{checkpoints[currentIndex].location}}</text>
+    </view>
 
     <view class="map-card">
       <map
@@ -49,7 +53,8 @@
         距打卡点约 <text class="distance-num">{{distance}}</text> 米
       </view>
       <view class="distance-value success" wx:if="{{inRange}}">
-        ✅ 已在打卡点范围内
+        <image class="status-inline-icon" src="{{icons.success}}" mode="aspectFit"></image>
+        <text>已在打卡点范围内</text>
       </view>
     </view>
 
@@ -67,7 +72,7 @@
     <view class="photo-section">
       <view class="section-label">我的打卡照片</view>
       <view class="photo-upload" bindtap="takePhoto" wx:if="{{!photoPath}}">
-        <text class="upload-icon">📷</text>
+        <image class="upload-icon-image" src="{{icons.camera}}" mode="aspectFit"></image>
         <text class="upload-text">点击拍照</text>
       </view>
       <image class="uploaded-photo" src="{{photoPath}}" mode="aspectFill" wx:if="{{photoPath}}"></image>

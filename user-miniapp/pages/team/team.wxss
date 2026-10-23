@@ -3,6 +3,19 @@
   padding: 120rpx 40rpx;
 }
 
+.empty-icon-image {
+  width: 88rpx;
+  height: 88rpx;
+  margin: 0 auto 18rpx;
+  display: block;
+}
+
+.empty-team-illustration {
+  width: 320rpx;
+  display: block;
+  margin: 0 auto 20rpx;
+}
+
 .team-actions {
   margin-top: 60rpx;
   display: flex;
@@ -21,15 +34,10 @@
   margin-bottom: 32rpx;
 }
 
-.team-avatar {
+.team-avatar-image {
   width: 100rpx;
   height: 100rpx;
-  background: linear-gradient(135deg, #FF6B35, #FF4757);
-  border-radius: 24rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 48rpx;
+  flex-shrink: 0;
 }
 
 .team-meta {

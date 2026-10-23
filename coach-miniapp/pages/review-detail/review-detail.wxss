@@ -104,6 +104,18 @@
   color: #666;
 }
 
+.location-line {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.location-icon {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+}
+
 .reject-info {
   display: flex;
   flex-direction: column;

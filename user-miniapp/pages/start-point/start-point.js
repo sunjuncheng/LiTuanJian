@@ -1,5 +1,6 @@
 const { get, post } = require('../../utils/request.js')
 const location = require('../../utils/location.js')
+const { ILLUSTRATION_START_POINT } = require('../../utils/default-images.js')
 
 Page({
   data: {
@@ -16,7 +17,12 @@ Page({
     mapScale: 16,
     markers: [],
     circles: [],
-    includePoints: []
+    includePoints: [],
+    startIllustration: ILLUSTRATION_START_POINT,
+    icons: {
+      location: '/assets/icons/location.svg',
+      success: '/assets/icons/success.svg'
+    }
   },
 
   onLoad(options) {

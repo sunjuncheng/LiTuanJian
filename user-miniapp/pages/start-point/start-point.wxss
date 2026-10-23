@@ -5,9 +5,11 @@
   color: #fff;
 }
 
-.point-icon {
-  font-size: 80rpx;
-  margin-bottom: 16rpx;
+.point-illustration {
+  width: 320rpx;
+  max-width: 100%;
+  margin: 0 auto 18rpx;
+  display: block;
 }
 
 .point-name {
@@ -92,12 +94,22 @@
 .distance-value.success {
   color: #6BCB77;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
 }
 
 .distance-num {
   font-size: 48rpx;
   font-weight: 800;
   color: #FF4757;
+}
+
+.status-inline-icon {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
 }
 
 .action-area {

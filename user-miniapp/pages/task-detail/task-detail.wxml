@@ -14,9 +14,18 @@
 
   <view class="task-info card">
     <view class="task-meta">
-      <text>📍 {{task.checkpointCount}} 个打卡点</text>
-      <text>👥 {{task.participantCount || 0}} 人参与</text>
-      <text>⏰ {{task.deadlineText}}</text>
+      <view class="meta-item">
+        <image class="meta-icon" src="{{icons.location}}" mode="aspectFit"></image>
+        <text>{{task.checkpointCount}} 个打卡点</text>
+      </view>
+      <view class="meta-item">
+        <image class="meta-icon" src="{{icons.team}}" mode="aspectFit"></image>
+        <text>{{task.participantCount || 0}} 人参与</text>
+      </view>
+      <view class="meta-item">
+        <image class="meta-icon" src="{{icons.clock}}" mode="aspectFit"></image>
+        <text>{{task.deadlineText}}</text>
+      </view>
     </view>
   </view>
 

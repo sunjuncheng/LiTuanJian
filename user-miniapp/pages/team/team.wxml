@@ -1,12 +1,12 @@
 <view class="container">
   <view wx:if="{{!isLoggedIn}}" class="no-team">
-    <view class="empty-icon">🔒</view>
+    <image class="empty-team-illustration" src="{{emptyTeamIllustration}}" mode="widthFix"></image>
     <view class="empty-tip">请先登录后查看队伍</view>
     <button class="btn-primary" bindtap="goLogin">去登录</button>
   </view>
 
   <view wx:elif="{{!myTeam}}" class="no-team">
-    <view class="empty-icon">👥</view>
+    <image class="empty-team-illustration" src="{{emptyTeamIllustration}}" mode="widthFix"></image>
     <view class="empty-tip">你还没有加入任何队伍</view>
     <view class="empty-sub">创建队伍或输入邀请码加入</view>
     <view class="team-actions">
@@ -17,7 +17,7 @@
 
   <view wx:if="{{myTeam}}" class="team-info card">
     <view class="team-header">
-      <view class="team-avatar">👥</view>
+      <image class="team-avatar-image" src="{{icons.team}}" mode="aspectFit"></image>
       <view class="team-meta">
         <text class="team-name">{{myTeam.name}}</text>
         <text class="team-leader">队长：{{myTeam.leaderName}}</text>

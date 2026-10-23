@@ -1,6 +1,9 @@
 const { get, post } = require('../../utils/request.js')
 const auth = require('../../utils/auth.js')
-const { DEFAULT_AVATAR } = require('../../utils/default-images.js')
+const {
+  DEFAULT_AVATAR,
+  ILLUSTRATION_EMPTY_TEAM
+} = require('../../utils/default-images.js')
 const app = getApp()
 
 Page({
@@ -9,9 +12,14 @@ Page({
     myTeam: null,
     isLoggedIn: false,
     defaultAvatar: DEFAULT_AVATAR,
+    emptyTeamIllustration: ILLUSTRATION_EMPTY_TEAM,
     creating: false,
     joining: false,
-    fromTask: false
+    fromTask: false,
+    icons: {
+      lock: '/assets/icons/lock.svg',
+      team: '/assets/icons/team.svg'
+    }
   },
 
   onLoad(options) {

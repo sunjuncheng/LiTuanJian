@@ -34,7 +34,10 @@
     </view>
 
     <view class="location-info card" wx:if="{{checkpoints[currentIndex].userLocation}}">
-      <text>📍 打卡定位：{{checkpoints[currentIndex].userLocation.latitude}}, {{checkpoints[currentIndex].userLocation.longitude}}</text>
+      <view class="location-line">
+        <image class="location-icon" src="{{icons.location}}" mode="aspectFit"></image>
+        <text>打卡定位：{{checkpoints[currentIndex].userLocation.latitude}}, {{checkpoints[currentIndex].userLocation.longitude}}</text>
+      </view>
       <text class="text-muted">提交时间：{{checkpoints[currentIndex].submitTime}}</text>
     </view>
 

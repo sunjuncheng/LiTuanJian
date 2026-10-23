@@ -8,7 +8,7 @@
   </view>
 
   <view wx:if="{{taskList.length === 0 && !loading}}" class="empty">
-    <view class="empty-icon">📋</view>
+    <image class="empty-icon-image" src="{{icons.task}}" mode="aspectFit"></image>
     <text>暂无任务，点击右上角新建</text>
   </view>
 
@@ -31,8 +31,14 @@
           </text>
         </view>
         <view class="task-meta">
-        <text class="meta-item">📍 {{item.checkpointCount}} 个打卡点</text>
-        <text class="meta-item">👥 {{item.participantCount}} 人参与</text>
+          <view class="meta-item">
+            <image class="meta-icon" src="{{icons.location}}" mode="aspectFit"></image>
+            <text>{{item.checkpointCount}} 个打卡点</text>
+          </view>
+          <view class="meta-item">
+            <image class="meta-icon" src="{{icons.team}}" mode="aspectFit"></image>
+            <text>{{item.participantCount}} 人参与</text>
+          </view>
         </view>
         <view class="task-actions">
           <view class="action-link" data-id="{{item.id}}" bindtap="goDetail">查看详情</view>

@@ -39,6 +39,11 @@ Page({
     canCancel: false,
     defaultImage: DEFAULT_IMAGE,
     defaultCover: DEFAULT_TASK_COVER,
+    icons: {
+      location: '/assets/icons/location.svg',
+      team: '/assets/icons/team.svg',
+      clock: '/assets/icons/clock.svg'
+    },
     accepting: false
   },
 

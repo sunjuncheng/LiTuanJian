@@ -1,6 +1,6 @@
 <view class="container">
   <view wx:if="{{records.length === 0 && !loading}}" class="empty">
-    <view class="empty-icon">🏆</view>
+    <image class="records-illustration" src="{{recordsIllustration}}" mode="widthFix"></image>
     <text>暂无完成记录</text>
     <text class="empty-sub">完成任务后会显示在这里</text>
   </view>
@@ -26,8 +26,14 @@
           </text>
         </view>
         <view class="record-meta">
-          <text class="meta-item">✅ 完成度 {{item.percentage}}%</text>
-          <text class="meta-item">📍 {{item.passedCount}}/{{item.totalCheckpoints}} 打卡点</text>
+          <view class="meta-item">
+            <image class="meta-icon" src="{{icons.success}}" mode="aspectFit"></image>
+            <text>完成度 {{item.percentage}}%</text>
+          </view>
+          <view class="meta-item">
+            <image class="meta-icon" src="{{icons.location}}" mode="aspectFit"></image>
+            <text>{{item.passedCount}}/{{item.totalCheckpoints}} 打卡点</text>
+          </view>
         </view>
       </view>
     </view>

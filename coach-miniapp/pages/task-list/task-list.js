@@ -6,7 +6,12 @@ Page({
   data: {
     taskList: [],
     loading: false,
-    defaultCover: DEFAULT_TASK_COVER
+    defaultCover: DEFAULT_TASK_COVER,
+    icons: {
+      task: '/assets/icons/task.svg',
+      location: '/assets/icons/location.svg',
+      team: '/assets/icons/team.svg'
+    }
   },
 
   onShow() {

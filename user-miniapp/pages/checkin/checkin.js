@@ -1,6 +1,9 @@
 const { get, post } = require('../../utils/request.js')
 const location = require('../../utils/location.js')
-const { DEFAULT_IMAGE } = require('../../utils/default-images.js')
+const {
+  DEFAULT_IMAGE,
+  ILLUSTRATION_CHECKIN
+} = require('../../utils/default-images.js')
 
 Page({
   data: {
@@ -12,6 +15,7 @@ Page({
     submitting: false,
     isEnded: false,
     defaultImage: DEFAULT_IMAGE,
+    checkinIllustration: ILLUSTRATION_CHECKIN,
     currentLocation: null,
     distance: 0,
     inRange: false,
@@ -20,7 +24,12 @@ Page({
     mapScale: 16,
     markers: [],
     circles: [],
-    includePoints: []
+    includePoints: [],
+    icons: {
+      location: '/assets/icons/location.svg',
+      success: '/assets/icons/success.svg',
+      camera: '/assets/icons/camera.svg'
+    }
   },
 
   onLoad(options) {

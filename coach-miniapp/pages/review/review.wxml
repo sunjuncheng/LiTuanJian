@@ -14,7 +14,7 @@
   </view>
 
   <view wx:if="{{messageList.length === 0 && !loading}}" class="empty">
-    <view class="empty-icon">{{activeTab === 'pending' ? '📝' : '✅'}}</view>
+    <image class="empty-icon-image" src="{{activeTab === 'pending' ? icons.review : icons.success}}" mode="aspectFit"></image>
     <text>{{activeTab === 'pending' ? '暂无待审核消息' : '暂无已审核消息'}}</text>
   </view>
 

@@ -145,6 +145,12 @@
   padding: 80rpx 40rpx;
 }
 
+.messages-illustration {
+  width: 320rpx;
+  display: block;
+  margin: 0 auto 20rpx;
+}
+
 .empty-title {
   font-size: 30rpx;
   color: #333;

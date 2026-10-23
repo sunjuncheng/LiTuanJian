@@ -1,0 +1,21 @@
+{
+  "camera": "./camera.svg",
+  "chat": "./chat.svg",
+  "checkin": "./checkin.svg",
+  "clear": "./clear.svg",
+  "clock": "./clock.svg",
+  "info": "./info.svg",
+  "live": "./live.svg",
+  "location": "./location.svg",
+  "lock": "./lock.svg",
+  "message": "./message.svg",
+  "phone": "./phone.svg",
+  "profile": "./profile.svg",
+  "records": "./records.svg",
+  "review": "./review.svg",
+  "settings": "./settings.svg",
+  "success": "./success.svg",
+  "target": "./target.svg",
+  "task": "./task.svg",
+  "team": "./team.svg"
+}

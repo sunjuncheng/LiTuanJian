@@ -29,7 +29,12 @@ Page({
     activeTab: 'solo',
     defaultAvatar: DEFAULT_AVATAR,
     defaultImage: DEFAULT_IMAGE,
-    defaultCover: DEFAULT_TASK_COVER
+    defaultCover: DEFAULT_TASK_COVER,
+    icons: {
+      location: '/assets/icons/location.svg',
+      team: '/assets/icons/team.svg',
+      clock: '/assets/icons/clock.svg'
+    }
   },
 
   onLoad(options) {

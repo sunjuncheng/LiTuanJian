@@ -1,4 +1,5 @@
 const { get, post } = require('../../utils/request.js')
+const { ILLUSTRATION_MESSAGES } = require('../../utils/default-images.js')
 
 function formatDateTime(value) {
   if (!value) return ''
@@ -15,7 +16,8 @@ Page({
   data: {
     list: [],
     unreadCount: 0,
-    loading: false
+    loading: false,
+    messagesIllustration: ILLUSTRATION_MESSAGES
   },
 
   onShow() {

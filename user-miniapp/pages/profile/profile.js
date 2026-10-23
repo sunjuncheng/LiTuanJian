@@ -1,6 +1,9 @@
 const auth = require('../../utils/auth.js')
 const { get } = require('../../utils/request.js')
-const { DEFAULT_AVATAR } = require('../../utils/default-images.js')
+const {
+  DEFAULT_AVATAR,
+  ILLUSTRATION_LOGIN
+} = require('../../utils/default-images.js')
 const app = getApp()
 
 Page({
@@ -14,7 +17,15 @@ Page({
     nickname: '',
     loading: false,
     defaultAvatar: DEFAULT_AVATAR,
-    unreadMessageCount: 0
+    loginIllustration: ILLUSTRATION_LOGIN,
+    unreadMessageCount: 0,
+    icons: {
+      phone: '/assets/icons/phone.svg',
+      task: '/assets/icons/task.svg',
+      records: '/assets/icons/records.svg',
+      message: '/assets/icons/message.svg',
+      settings: '/assets/icons/settings.svg'
+    }
   },
 
   onShow() {

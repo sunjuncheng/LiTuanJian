@@ -14,9 +14,18 @@
 
   <view class="task-info card">
     <view class="task-meta">
-      <text>📍 {{task.checkpointCount}} 个打卡点</text>
-      <text>👥 {{participants.length + teams.length}} 个参与</text>
-      <text>⏰ {{task.deadlineText}}</text>
+      <view class="meta-item">
+        <image class="meta-icon" src="{{icons.location}}" mode="aspectFit"></image>
+        <text>{{task.checkpointCount}} 个打卡点</text>
+      </view>
+      <view class="meta-item">
+        <image class="meta-icon" src="{{icons.team}}" mode="aspectFit"></image>
+        <text>{{participants.length + teams.length}} 个参与</text>
+      </view>
+      <view class="meta-item">
+        <image class="meta-icon" src="{{icons.clock}}" mode="aspectFit"></image>
+        <text>{{task.deadlineText}}</text>
+      </view>
     </view>
     <view class="overall-progress">
       <text>整体完成度</text>
@@ -126,7 +135,7 @@
   <view wx:if="{{activeTab === 'team'}}" class="participant-list">
     <view class="participant-card card" wx:for="{{teams}}" wx:key="id">
       <view class="p-header">
-        <view class="team-avatar">👥</view>
+        <image class="team-avatar-image" src="{{icons.team}}" mode="aspectFit"></image>
         <view class="p-info">
           <text class="p-name">{{item.name}}</text>
           <text class="text-muted">队长：{{item.leaderName}} · {{item.memberCount}}人</text>

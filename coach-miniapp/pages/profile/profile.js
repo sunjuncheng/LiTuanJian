@@ -9,7 +9,12 @@ Page({
     phone: '',
     password: '',
     loading: false,
-    defaultAvatar: DEFAULT_AVATAR
+    defaultAvatar: DEFAULT_AVATAR,
+    icons: {
+      task: '/assets/icons/task.svg',
+      review: '/assets/icons/review.svg',
+      settings: '/assets/icons/settings.svg'
+    }
   },
 
   onShow() {

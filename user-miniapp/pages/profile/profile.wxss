@@ -52,6 +52,9 @@
   padding: 20rpx 60rpx;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .login-text {
@@ -63,6 +66,18 @@
 .login-form {
   width: 100%;
   padding: 0 10rpx;
+}
+
+.login-illustration {
+  width: 320rpx;
+  display: block;
+  margin: 0 auto 20rpx;
+}
+
+.login-prompt-illustration {
+  width: 240rpx;
+  display: block;
+  margin: 0 auto 12rpx;
 }
 
 .wx-login-btn {
@@ -171,6 +186,13 @@
 .menu-icon {
   font-size: 36rpx;
   margin-right: 20rpx;
+}
+
+.menu-icon-image {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
 }
 
 .menu-text {

@@ -8,7 +8,10 @@ Page({
     checkpoints: [],
     currentIndex: 0,
     rejectReason: '',
-    showReject: false
+    showReject: false,
+    icons: {
+      location: '/assets/icons/location.svg'
+    }
   },
 
   onLoad(options) {

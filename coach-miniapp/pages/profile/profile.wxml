@@ -24,17 +24,17 @@
 
   <view class="menu-list card">
     <view class="menu-item" bindtap="goTaskList">
-      <text class="menu-icon">🏃</text>
+      <image class="menu-icon-image" src="{{icons.task}}" mode="aspectFit"></image>
       <text class="menu-text">任务概览</text>
       <text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="goReviewList">
-      <text class="menu-icon">📋</text>
+      <image class="menu-icon-image" src="{{icons.review}}" mode="aspectFit"></image>
       <text class="menu-text">审核记录</text>
       <text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="showSettingsTip">
-      <text class="menu-icon">⚙️</text>
+      <image class="menu-icon-image" src="{{icons.settings}}" mode="aspectFit"></image>
       <text class="menu-text">设置</text>
       <text class="menu-arrow">></text>
     </view>

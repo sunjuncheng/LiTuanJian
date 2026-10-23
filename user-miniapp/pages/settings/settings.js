@@ -3,7 +3,11 @@ const auth = require('../../utils/auth.js')
 Page({
   data: {
     version: '1.0.0',
-    userInfo: null
+    userInfo: null,
+    icons: {
+      clear: '/assets/icons/clear.svg',
+      info: '/assets/icons/info.svg',
+    }
   },
 
   onShow() {

@@ -1,6 +1,9 @@
 const { get } = require('../../utils/request.js')
 const auth = require('../../utils/auth.js')
-const { DEFAULT_TASK_COVER } = require('../../utils/default-images.js')
+const {
+  DEFAULT_TASK_COVER,
+  ILLUSTRATION_EMPTY_TASKS
+} = require('../../utils/default-images.js')
 const app = getApp()
 
 Page({
@@ -11,7 +14,16 @@ Page({
     myTasks: [],
     loading: false,
     isLoggedIn: false,
-    defaultCover: DEFAULT_TASK_COVER
+    defaultCover: DEFAULT_TASK_COVER,
+    emptyTasksIllustration: ILLUSTRATION_EMPTY_TASKS,
+    icons: {
+      task: '/assets/icons/task.svg',
+      location: '/assets/icons/location.svg',
+      team: '/assets/icons/team.svg',
+      lock: '/assets/icons/lock.svg',
+      target: '/assets/icons/target.svg',
+      clock: '/assets/icons/clock.svg'
+    }
   },
 
   onLoad() {

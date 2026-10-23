@@ -134,6 +134,13 @@
   margin-right: 20rpx;
 }
 
+.menu-icon-image {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
 .menu-text {
   flex: 1;
   font-size: 28rpx;

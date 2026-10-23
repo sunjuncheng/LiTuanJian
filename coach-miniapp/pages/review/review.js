@@ -20,7 +20,11 @@ Page({
     pendingCount: 0,
     reviewedCount: 0,
     loading: false,
-    defaultAvatar: DEFAULT_AVATAR
+    defaultAvatar: DEFAULT_AVATAR,
+    icons: {
+      review: '/assets/icons/review.svg',
+      success: '/assets/icons/success.svg'
+    }
   },
 
   onShow() {

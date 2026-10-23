@@ -48,6 +48,7 @@
   </view>
 
   <view class="empty card" wx:else>
+    <image class="messages-illustration" src="{{messagesIllustration}}" mode="widthFix"></image>
     <text class="empty-title">暂无消息提醒</text>
     <text class="empty-desc">任务提醒、直播提醒等消息，会在这里统一展示</text>
   </view>

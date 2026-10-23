@@ -1,6 +1,9 @@
 <view class="container">
   <view class="header">
-    <text class="title">🏃 团建打卡任务</text>
+    <view class="title-row">
+      <image class="title-icon" src="{{icons.task}}" mode="aspectFit"></image>
+      <text class="title">团建打卡任务</text>
+    </view>
     <text class="subtitle">挑战自我，团队协作</text>
   </view>
 
@@ -15,8 +18,9 @@
 
   <view wx:if="{{currentTab === 'all'}}">
     <view wx:if="{{allTasks.length === 0 && !loading}}" class="empty">
-      <view class="empty-icon">📋</view>
+      <image class="empty-illustration" src="{{emptyTasksIllustration}}" mode="widthFix"></image>
       <text>暂无进行中的任务</text>
+      <text class="empty-sub">先去创建一场充满活力的团建挑战吧</text>
     </view>
 
     <view class="task-list">
@@ -41,11 +45,20 @@
           </view>
           <view class="task-desc">{{item.description}}</view>
           <view class="task-meta">
-            <text class="meta-item">📍 {{item.checkpointCount}} 个打卡点</text>
-            <text class="meta-item">👥 {{item.participantCount}} 人参与</text>
+            <view class="meta-item">
+              <image class="meta-icon" src="{{icons.location}}" mode="aspectFit"></image>
+              <text>{{item.checkpointCount}} 个打卡点</text>
+            </view>
+            <view class="meta-item">
+              <image class="meta-icon" src="{{icons.team}}" mode="aspectFit"></image>
+              <text>{{item.participantCount}} 人参与</text>
+            </view>
           </view>
           <view class="task-meta" wx:if="{{item.deadlineText}}">
-            <text class="meta-item">⏰ 截止 {{item.deadlineText}}</text>
+            <view class="meta-item">
+              <image class="meta-icon" src="{{icons.clock}}" mode="aspectFit"></image>
+              <text>截止 {{item.deadlineText}}</text>
+            </view>
           </view>
           <view class="task-footer">
             <text wx:if="{{item.accepted}}" class="status-badge success">已接单</text>
@@ -60,7 +73,7 @@
 
   <view wx:if="{{currentTab === 'my'}}">
     <view wx:if="{{!isLoggedIn}}" class="empty">
-      <view class="empty-icon">🔒</view>
+      <image class="empty-illustration" src="{{emptyTasksIllustration}}" mode="widthFix"></image>
       <text>请先登录查看我的任务</text>
       <button class="btn-primary" bindtap="goLogin">去登录</button>
     </view>
@@ -73,8 +86,9 @@
       </view>
 
       <view wx:if="{{filteredMyTasks.length === 0 && !loading}}" class="empty">
-        <view class="empty-icon">🎯</view>
+        <image class="empty-illustration" src="{{emptyTasksIllustration}}" mode="widthFix"></image>
         <text>暂无任务</text>
+        <text class="empty-sub">接单后就能在这里看到你的任务进度</text>
       </view>
 
       <view class="task-list">
@@ -111,7 +125,10 @@
             </view>
           </view>
           <view class="task-meta" wx:if="{{item.deadlineText}}">
-            <text class="meta-item">⏰ 截止 {{item.deadlineText}}</text>
+            <view class="meta-item">
+              <image class="meta-icon" src="{{icons.clock}}" mode="aspectFit"></image>
+              <text>截止 {{item.deadlineText}}</text>
+            </view>
           </view>
           <view class="task-actions" wx:if="{{item.statusText === '进行中' && !item.unlocked}}">
             <view

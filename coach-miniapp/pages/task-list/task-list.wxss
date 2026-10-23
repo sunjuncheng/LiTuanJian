@@ -92,8 +92,24 @@
 }
 
 .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
   font-size: 24rpx;
   color: #888;
+}
+
+.meta-icon {
+  width: 26rpx;
+  height: 26rpx;
+  flex-shrink: 0;
+}
+
+.empty-icon-image {
+  width: 88rpx;
+  height: 88rpx;
+  margin: 0 auto 14rpx;
+  display: block;
 }
 
 .task-actions {

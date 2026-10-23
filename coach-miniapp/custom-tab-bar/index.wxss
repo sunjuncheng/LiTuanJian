@@ -21,7 +21,8 @@
 }
 
 .tab-icon {
-  font-size: 40rpx;
+  width: 44rpx;
+  height: 44rpx;
   transition: transform 0.2s;
 }
 

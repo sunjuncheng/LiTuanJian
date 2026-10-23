@@ -9,7 +9,10 @@ Page({
     nickname: '',
     avatarUrl: '',
     defaultAvatar: DEFAULT_AVATAR,
-    saving: false
+    saving: false,
+    icons: {
+      camera: '/assets/icons/camera.svg'
+    }
   },
 
   onLoad() {

@@ -1,6 +1,6 @@
 <view class="container" wx:if="{{task}}">
   <view class="point-card card">
-    <view class="point-icon">📍</view>
+    <image class="point-illustration" src="{{startIllustration}}" mode="widthFix"></image>
     <view class="point-name">{{task.startPoint.name}}</view>
     <view class="point-desc">请前往此地点，上传实时位置以解锁打卡任务</view>
     <view class="range-tip">允许误差范围：{{task.startPoint.range}} 米</view>
@@ -32,7 +32,8 @@
       距起点约 <text class="distance-num">{{distance}}</text> 米
     </view>
     <view class="distance-value success" wx:if="{{inRange}}">
-      ✅ 已在起点范围内
+      <image class="status-inline-icon" src="{{icons.success}}" mode="aspectFit"></image>
+      <text>已在起点范围内</text>
     </view>
   </view>
 
